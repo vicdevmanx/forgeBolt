@@ -60,7 +60,6 @@ export default function MobileNavModal() {
             padding: 2,
           }}
           role="presentation"
-          onClick={toggleDrawer}
           onKeyDown={toggleDrawer}
         >
           <h2
@@ -81,13 +80,13 @@ export default function MobileNavModal() {
                 key={link.to}
                 disablePadding
                 sx={{ marginBottom: "0.5rem", borderRadius: "6px" }}
+                onClick={() => setOpen(false)}
               >
                 <NavLink
                   to={link.to}
-                  onClick={() => setOpen(false)}
                   style={{ width: "100%", textDecoration: "none" }}
                   className={({ isActive }) =>
-                    `block px-4 py-2 rounded-md bg-[var(--bg-tertiary)] transition font-[poppins-bold] font-bold ${
+                    `block px-4 py-1.5 rounded-md bg-[var(--bg-tertiary)] transition font-[poppins-bold] font-bold ${
                       isActive
                         ? 'bg-[var(--color-primary)] text-white'
                         : 'text-[var(--text-secondary)] hover:text-white hover:bg-[var(--color-primary)]'
