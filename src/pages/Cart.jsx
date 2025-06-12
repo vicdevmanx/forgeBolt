@@ -94,7 +94,7 @@ export default function Cart() {
               >
                 {/* Cancel Button */}
                 <button
-                  className="absolute top-1 right-1 text-[var(--text-tertiary)] hover:text-red-500 hover:bg-red-500/20  transition-colors rounded-full p-1"
+                  className="absolute top-2 right-2 text-[var(--text-tertiary)] hover:text-red-500 hover:bg-red-500/20  transition-colors rounded-full p-1"
                   aria-label="Remove item"
                   onClick={() => removeProduct(item.id)}
                 >
@@ -105,7 +105,7 @@ export default function Cart() {
                 <img
                   src={item.products.image_url}
                   alt={item.products.name}
-                  className="w-20 h-20 object-cover rounded"
+                  className="w-24 h-24 object-cover rounded"
                 />
                 <div className="flex-1">
                   <div className="font-[poppins-semibold] text-[var(--text-primary)]">{item.products.name}</div>
@@ -115,7 +115,7 @@ export default function Cart() {
                   </div>
                 </div>
                 {/* Price & Counter to the right */}
-                <div className="flex flex-col items-end gap-0 min-w-[90px] pt-3">
+                <div className="flex flex-col items-end gap-2 min-w-[90px] pt-8">
                   <div className="font-[poppins-bold] text-[var(--text-secondary)]">${item.total_price}</div>
                   {/* Small Counter */}
                   <div className="flex items-center bg-[var(--bg-tertiary)] rounded-md px-1 py-0.5 gap-1 shadow-inner">
