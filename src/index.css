@@ -1,0 +1,131 @@
+@import 'tailwindcss';
+
+@layer utilities{
+  span, button{
+    @apply cursor-pointer
+  }
+}
+
+.scrollbar-hide{
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::--webkit-scrollbar {
+  display: none;
+}
+
+:root {
+  --bg-color: #fafafa;
+  --bg-overlay: #f9fafb;
+  --bg-secondary: #f5f5f5;
+  --bg-tertiary: #e5e7eb;
+  --text-primary: #000000;
+  --text-secondary: #2c2c2c;
+  --text-tertiary: #6c6c6c;
+  --color-light: #ecfdf5;
+  --color-primary: #059669;
+  --color-dark: #059669;
+  --color-secondary: #059669;
+}
+
+.dark {
+  --bg-color: #1c1c1c;
+  --bg-secondary: #232323;
+  --bg-tertiary: #2a2a2a;
+  --text-primary: #ffffff;
+  --text-secondary: #d2d2d2;
+  --text-tertiary: #6c6c6c;
+  --color-light: #ecfdf5;
+  --color-secondary: #059669;
+  --color-dark: #059669;
+  --color-primary: #059669;
+}
+
+.handleScroll {
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scroll-thumb) transparent;
+}
+
+/* WebKit: Chrome, Safari, Edge */
+.handleScroll::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+  display: none;
+}
+
+.handleScroll:hover::-webkit-scrollbar {
+  display: block;
+}
+
+.handleScroll::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 2px;
+}
+
+.handleScroll::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-thumb);
+  border-radius: 10px;
+  transition: background-color 0.3s;
+}
+
+.handleScroll::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scroll-thumb-hover);
+}
+
+.handleScroll::-webkit-scrollbar-thumb:active {
+  background-color: var(--scroll-thumb-active);
+}
+
+.handleScroll::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none;
+  background: transparent;
+}
+
+@font-face {
+  font-family: poppins;
+  src: url('./assets/Poppins/Poppins-Regular.ttf');
+}
+@font-face {
+  font-family: poppins-italic;
+  src: url('./assets/Poppins/Poppins-Italic.ttf');
+}
+@font-face {
+  font-family: poppins-medium;
+  src: url('./assets/Poppins/Poppins-Medium.ttf');
+}
+@font-face {
+  font-family: poppins-semibold;
+  src: url('./assets/Poppins/poppins-Bold.ttf');
+}
+@font-face {
+  font-family: poppins-bold;
+  src: url('./assets/Poppins/Poppins-ExtraBold.ttf');
+}
+
+/* @import 'tailwindcss'
+
+@layer utilities {
+  .theme-card {
+    @apply bg-[var(--color-bg)] text-[var(--color-text)] p-4 rounded-lg shadow-md transition-colors duration-300;
+  }
+  .theme-card:hover {
+    @apply bg-[var(--color-secondary)] text-[var(--color-primary)];
+  }
+
+  .btn-primary {
+    @apply bg-[var(--color-primary)] text-white px-4 py-2 rounded-lg font-medium shadow-sm transition;
+  }
+  .btn-primary:hover {
+    @apply bg-[var(--color-secondary)] text-black;
+  }
+
+  .btn-outline {
+    @apply border border-[var(--color-primary)] text-[var(--color-primary)] px-4 py-2 rounded-md;
+  }
+  .btn-outline:hover {
+    @apply bg-[var(--color-primary)] text-white;
+  }
+} */
