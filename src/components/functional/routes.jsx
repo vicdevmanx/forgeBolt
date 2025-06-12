@@ -12,6 +12,7 @@ import Register from "@/pages/Register";
 import Checkout from "@/pages/Checkout";
 import Product from "@/pages/Product";
 import Products from "@/pages/Products";
+import ResetPassword from "@/pages/resetPassword";
 
 export const routes = createBrowserRouter([
   {
@@ -29,6 +30,7 @@ export const routes = createBrowserRouter([
       { path: "checkout", element: <Checkout /> },
       { path: "products/:id", element: <Product /> },
       { path: "products", element: <Products /> },
+       { path: "reset-password", element: <ResetPassword /> },
       { path: "*", element: <NotFound /> },
     ],
   },

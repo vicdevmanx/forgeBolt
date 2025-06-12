@@ -1,5 +1,6 @@
 import API from "@/components/functional/axios"
 import { Button } from "@/components/ui/button"
+import ForgotPassword from "@/pages/forgotPassword"
 import { useAuthStore } from "@/store/authStore"
 import { Loader } from "lucide-react"
 import { Mail } from "lucide-react"
@@ -66,23 +67,6 @@ useEffect(() => {
         }
 
     }
-    const [reseting, setReseting] = useState(false)
-    const forgotPassword = async () => {
-        try {
-            if (!form.email) {
-                toast('Enter Mail!')
-                return
-            }
-            setReseting(true)
-            const res = await API.post('/auth/forgot-password', { email: form.email })
-            toast.success('Email sent!')
-            setReseting(false)
-            console.log(res)
-        } catch (e) {
-            console.error(e)
-            setReseting(false)
-        }
-    }
 
     useEffect(() => {
         setForm((prev) => ({
@@ -146,34 +130,9 @@ useEffect(() => {
                     </div>
                 </div>
                 {/* security */}
-                <div className="flex-1 w-full min-w-0 max-w-full md:min-w-90 md:max-w-100 h-auto md:h-90 border-1 border-[var(--bg-tertiary)] flex flex-col gap-5 bg-[var(--bg-secondary)] rounded-lg p-4 max-md:mx-auto"
-                    style={{ minWidth: "0" }}>
-                    <span className="flex gap-2 text-xl font-[poppins-semibold] items-center text-[var(--text-secondary)]">
-                        <Lock className="size-5" /> Security Settings</span>
-                    <span className="flex flex-col gap-2 text-[var(--text-tertiary)] font-[poppins-medium] text-xs">
-                        <span className="text-sm font-[poppins-semibold] text-[var(--text-secondary)]">Reset Password</span>
-                        Enter your email address to receive <br /> password reset instructions.</span>
-                    <label className="flex flex-col gap-1">
-                        <p className="font-[poppins-semibold] text-[var(--text-tertiary)] text-sm">Email</p>
-                        <input type="text"
-                            placeholder="Enter your Email"
-                            name='email'
-                            disabled={true}
-                            value={form.email}
-                            onChange={handleChange}
-                            className="disabled:opacity-50 font-[poppins-medium] disabled:cursor-not-allowed w-full p-1.5 rounded-lg border-3 transition outline-0 text-sm bg-[var(--bg-tertiary)] border-transparent focus:border-[var(--color-primary)]" />
-                    </label>
-                    <Button onClick={forgotPassword} disabled={reseting} className='disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1.5 justify-center w-full py-5 bg-[var(--color-primary)] text-white font-[poppins-medium]'>
-                        {reseting ?
-                            <> <Loader size='16px' /> <p>Sending Mail...</p></>
-                            :
-                            <>
-                                <Mail className="size-4.5" />
-                                Send Mail
-                            </>}
-                    </Button>
+                <ForgotPassword email={form.email} classes="flex-1 w-full min-w-0 max-w-full md:min-w-90 md:max-w-100 h-auto md:h-90 border-1 border-[var(--bg-tertiary)] flex flex-col gap-5 bg-[var(--bg-secondary)] rounded-lg p-4 max-md:mx-auto"/>
                 </div>
-            </div>
+  
             {/* account status */}
         </div>
     )

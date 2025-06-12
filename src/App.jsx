@@ -9,6 +9,9 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import { useAuthStore } from './store/authStore';
 import { useEffect } from 'react';
+import { useState } from 'react';
+import ResetPassword from './pages/resetPassword';
+import ForgotPassword from './pages/forgotPassword';
 
 
 
@@ -22,9 +25,15 @@ const LoginModalWrapper = () => {
     openSignupModal()
   }
 
+  const [forgotPassword, setForgotPassword] = useState(false)
+  const freshMail = useAuthStore(s => s.freshMail)
+
   return (
     <AuthModal isOpen={isOpen} onClose={close} title="Login to Your Account">
-      <Login />
+      {forgotPassword ? <ForgotPassword freshMail={freshMail}/> : <Login />}
+      {forgotPassword ? 
+       <p onClick={() => setForgotPassword(false)}  className='text-sm my-4 underline text-[var(--color-primary)] cursor-pointer'>Back to Login</p>
+        : <p onClick={() => setForgotPassword(true)} className='text-sm my-4 underline text-[var(--color-primary)] cursor-pointer'>Forget Password?</p>}
         <p className='text-center my-4'>Don't have an Account? <span className='underline text-[var(--color-secondary)]' onClick={switchtosignup}>Signup</span></p>
         
     </AuthModal>

@@ -17,14 +17,17 @@ export default function Home() {
     const getCart = useAuthStore(s => s.getCart)
     const setTotal = useAuthStore(s => s.setTotal)
     const cart = useAuthStore(s => s.cart)
+    const isLoggedIn = useAuthStore(s => s.token)
     const fetchProducts = useAuthStore(s => s.fetchProducts)
     const [recentProducts, setRecentProducts] = useState(null)
     useEffect(() => {
-        !cart ?
-            getCart().then(() => {
+        cart?.length ?
+            setTotal(cart.length)
+            :
+           isLoggedIn && getCart().then(() => {
                 const cart = useAuthStore.getState().cart
                 setTotal(cart.length)
-            }) : setTotal(cart.length);
+            })
         if (products) {
             setRecentProducts(products?.slice(0, 3))
         } else {

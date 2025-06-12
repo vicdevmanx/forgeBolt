@@ -69,6 +69,8 @@ export const useAuthStore = create((set) => ({
     } catch (e) {
       console.log(e)
     }
-  }
+  },
+  freshMail: null,
+  setFreshMail: (freshMail) => set({ freshMail })
 
 }));
