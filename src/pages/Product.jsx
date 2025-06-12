@@ -19,7 +19,15 @@ export default function Product() {
   const getCart = useAuthStore(s => s.getCart)
   const setTotal = useAuthStore(s => s.setTotal)
   const fetchProducts = useAuthStore(s => s.fetchProducts)
+  const isLoggedIn = useAuthStore(s => s.token)
+
   const handleAddToCart = (e) => {
+      if (!isLoggedIn) {
+      e.preventDefault();
+      e.stopPropagation();
+      toast.info('login to add to cart')
+      return
+    }
     e.preventDefault();
     setLoading(true)
     addToCart(id).then(() => {

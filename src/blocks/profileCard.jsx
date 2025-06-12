@@ -19,7 +19,9 @@ export const ProfileCard = () => {
     const [email, setEmail] = useState(useAuthStore(s => s?.user?.email))
     const fetchUser = useAuthStore(s => s.fetchUser)
 
-
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
     useEffect(() => {
         fetchUser().then(() => {
             const user = useAuthStore.getState().user;

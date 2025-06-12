@@ -24,7 +24,14 @@ const ProductCard = ({ product = {
   const fetchProducts = useAuthStore(s => s.fetchProducts)
   const getCart = useAuthStore(s => s.getCart)
   const setTotal = useAuthStore(s => s.setTotal)
+  const isLoggedIn = useAuthStore(s => s.token)
   const handleAddToCart = (e) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+      e.stopPropagation();
+      toast.info('login to add to cart')
+      return
+    }
     e.preventDefault();
     e.stopPropagation();
     setLoading(true)
@@ -35,7 +42,7 @@ const ProductCard = ({ product = {
         setTotal(cart.length)
         setLoading(false)
       })
-      
+
       fetchProducts()
     });
   };
@@ -47,8 +54,8 @@ const ProductCard = ({ product = {
   };
 
   const cardClasses = variant === 'compact'
-    ? 'group relative bg-[var(--bg-color)] rounded-lg border border-[var(--bg-tertiary)] hover:shadow-lg transition-all duration-300 hover:scale-[1.02] w-full min-w-58 max-w-88'
-    : 'group relative bg-[var(--bg-color)] rounded-xl border border-[var(--bg-tertiary)] hover:shadow-xl transition-all duration-300 hover:scale-[1.02] overflow-hidden w-full min-w-58  max-w-88';
+    ? 'group relative bg-[var(--bg-secondary)] rounded-lg border border-[var(--bg-tertiary)] hover:shadow-lg transition-all duration-300 hover:scale-[1.02] w-full min-w-58 max-w-88'
+    : 'group relative bg-[var(--bg-secondary)] rounded-xl border border-[var(--bg-tertiary)] hover:shadow-xl transition-all duration-300 hover:scale-[1.02] overflow-hidden w-full min-w-58  max-w-88';
 
 
   return (
@@ -100,7 +107,7 @@ const ProductCard = ({ product = {
         </div>
 
         {/* Content */}
-        <div className={`p-4 ${variant === 'compact' ? 'space-y-2' : 'space-y-3'}`}>
+        <div className={`p-3 ${variant === 'compact' ? 'space-y-0' : 'space-y-1'}`}>
 
           {/* Title */}
           <h3 className={`font-[poppins-semibold] line-clamp-2 h-14 text-[var(--color-primary)] ${variant === 'compact' ? 'text-sm' : 'text-lg'}`}>

@@ -37,7 +37,7 @@ export default function Home() {
 
     return (
         <div className="flex flex-col">
-            <div className="flex flex-col gap-4 px-8 max-lg:p-2 justify-center items-center min-h-[90vh] bg-gradient-to-r from-[var(--color-primary)]/10 via-[var(--bg-color)] to-[var-(--color-light)]">
+            <div className="flex flex-col gap-4 px-8 max-lg:p-2 justify-center items-center min-h-[90vh] bg-gradient-to-br from-[var(--color-primary)]/15 via-[var(--bg-color)] to-[var-(--color-light)]">
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -64,11 +64,11 @@ export default function Home() {
                 exit={{ opacity: 0, y: -40 }}
                 transition={{ duration: 0.4, ease: "easeInOut" }}
             >
-                <div className="flex flex-col gap-8 mt-16 items-center">
+                <div className="flex flex-col gap-8 mt-12 items-center">
                     <h1 className=" text-3xl font-[poppins-bold]">Popular Products</h1>
                     <p className="text-md font-[poppins-medium] max-w-md text-center text-[var(--text-tertiary)] -mt-4 mb-8 p-2 py-0">Hand-picked tools from top brands, loved by professionals</p>
                     <div className="w-full flex justify-center">
-                        <div className="flex flex-wrap gap-8 items-center justify-center max-w-6xl mb-8 -mt-4">
+                        <div className="flex flex-wrap gap-6 items-center justify-center max-w-6xl mb-8 -mt-4">
                             {recentProducts && recentProducts.map((product, i) =>
                                 <ProductCard product={product} key={i} />
                             )}
@@ -79,12 +79,12 @@ export default function Home() {
                 </div>
                 <div className="py-6 p-2 bg-[var(--color-primary)] flex flex-col gap-2 items-center w-full text-white mt-4">
                     <h1 className="min-lg:text-3xl min-sm:text-2xl text-xl font-[poppins-bold] text-center">Stay Updated With Forge&Bolt</h1>
-                    <p className="text-md py-2 font-[poppins-medium] max-w-lg text-center">Get the latest deals, new arrivals, and expert tips delivered to your inbox</p>
+                    <p className="text-sm pb-2 font-[poppins-medium] max-w-lg text-center">Get the latest deals, new arrivals, and expert tips delivered to your inbox</p>
                     <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md justify-center items-center">
                         <Input
                             type="email"
                             placeholder="Enter your email to subscribe"
-                            className="flex-1 rounded-md bg-transparent outline-0 border-2 text-white border-emerald-400 placeholder:text-gray-200 py-5"
+                            className="flex-1 rounded-md bg-transparent outline-0 border-2 text-white border-emerald-500 placeholder:text-gray-200 py-2.5"
                         />
                         <Button className="bg-emerald-500 text-white rounded-md px-6 py-5 font-[poppins-bold]">
                             Subscribe

@@ -24,6 +24,9 @@ export default function Cart() {
   //     image_url: "https://via.placeholder.com/80",
   //   },
   // ];
+  useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
 
 
   const getCart = useAuthStore(s => s.getCart);

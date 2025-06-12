@@ -30,7 +30,7 @@ export default function Header() {
   }
 
   const trigger = (
-    <div className="p-2 hover:bg-[var(--bg-tertiary)] active:bg-[var(--bg-tertiary)] rounded-lg flex gap-1 items-end cursor-pointer">
+    <div className="p-2 hover:bg-[var(--bg-tertiary)] active:bg-[var(--bg-tertiary)] rounded-lg flex gap-1 items-end cursor-pointer active:scale-95 transition-transform">
       <User className="size-5" />
       <h3 className="text-xs text-[var(--text-primary)] font-[poppins-medium]">{user ? user.name?.slice(0,6) || user.name  : "loading"}..</h3>
     </div>
