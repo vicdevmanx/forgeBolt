@@ -29,12 +29,12 @@ const LoginModalWrapper = () => {
   const freshMail = useAuthStore(s => s.freshMail)
 
   return (
-    <AuthModal isOpen={isOpen} onClose={close} title="Login to Your Account">
+    <AuthModal isOpen={isOpen} onClose={close} title={forgotPassword ? "Reset Password" : "Login to Your Account"}>
       {forgotPassword ? <ForgotPassword freshMail={freshMail}/> : <Login />}
       {forgotPassword ? 
-       <p onClick={() => setForgotPassword(false)}  className='text-sm my-4 underline text-[var(--color-primary)] cursor-pointer'>Back to Login</p>
-        : <p onClick={() => setForgotPassword(true)} className='text-sm my-4 underline text-[var(--color-primary)] cursor-pointer'>Forget Password?</p>}
-        <p className='text-center my-4'>Don't have an Account? <span className='underline text-[var(--color-secondary)]' onClick={switchtosignup}>Signup</span></p>
+       <p onClick={() => setForgotPassword(false)}  className='text-sm my-4 mb-6 underline text-[var(--color-primary)] cursor-pointer'>Back to Login</p>
+        : <p onClick={() => setForgotPassword(true)} className='text-sm my-4 mb-6 underline text-[var(--color-primary)] cursor-pointer'>Forget Password?</p>}
+        <p className='text-center my-4 text-sm'>Don't have an Account? <span className='underline text-[var(--color-secondary)]' onClick={switchtosignup}>Signup</span></p>
         
     </AuthModal>
   );
@@ -53,7 +53,7 @@ const SignupModalWrapper = () => {
   return (
     <AuthModal isOpen={isOpen} onClose={close} title="Create a New Account">
       <Register/>
-      <p className='text-center my-4'>Already have an Account? <span className='underline text-[var(--color-secondary)]' onClick={switchtoLogin}>Login</span></p>
+      <p className='text-center my-4 text-sm'>Already have an Account? <span className='underline text-[var(--color-secondary)]' onClick={switchtoLogin}>Login</span></p>
     
     </AuthModal>
   );

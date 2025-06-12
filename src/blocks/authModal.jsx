@@ -13,7 +13,7 @@ export default function AuthModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className={cn(
-          "rounded-xl border-none shadow-lg w-full max-w-md transition-all",
+          "rounded-xl border-none shadow-lg w-full max-w-md transition-all p-4",
           "bg-[var(--bg-color)] text-[var(--text-primary)] font-[poppins-semibold]"
         )}
         style={{

@@ -5,12 +5,16 @@ import { Loader, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import React, { useState } from "react";
 import { toast } from "sonner";
 import { useLocation } from 'react-router-dom'
+import { useAuthStore } from "@/store/authStore";
+import { useNavigate } from 'react-router-dom'
 
 const ResetPassword = () => {
     const [resetting, setResetting] = useState(false)
     const [form, setForm] = useState({ password: "", confirm: "" });
+    const openLoginModal = useAuthStore(s => s.openLoginModal)
     const location = useLocation();
     const [err, setErr] = useState(null)
+    const navigate = useNavigate()
     const resetPassword = async () => {
         try {
             if (!form.password || !form.confirm) {
@@ -33,6 +37,8 @@ const ResetPassword = () => {
             const res = await API.post('/auth/reset-password', { token:token , newPassword: form.password })
             toast.success('Password has been reset!')
             setResetting(false)
+            navigate('/')
+            openLoginModal()
             console.log(res)
         } catch (e) {
             console.log(e)
@@ -53,7 +59,7 @@ const ResetPassword = () => {
                 <span className="text-sm font-[poppins-semibold] text-[var(--text-secondary)]">
                     Reset Password</span>
                 <label className="flex flex-col gap-1 relative">
-                    <p className="font-[poppins-semibold] text-[var(--text-tertiary)] text-sm">New Password</p>
+                    {/* <p className="font-[poppins-semibold] text-[var(--text-tertiary)] text-sm">New Password</p> */}
                     <input
                         type={showPassword ? "text" : "password"}
                         placeholder="Enter your New Password"
@@ -71,7 +77,7 @@ const ResetPassword = () => {
                         className="disabled:opacity-50 font-[poppins-medium] disabled:cursor-not-allowed w-full p-1.5 rounded-lg border-3 transition outline-0 text-sm bg-[var(--bg-tertiary)] border-transparent focus:border-[var(--color-primary)]"
                     />
                     <span
-                        className="absolute right-3 top-9 cursor-pointer text-[var(--text-tertiary)]"
+                        className="absolute right-3 top-3 cursor-pointer text-[var(--text-tertiary)]"
                         onClick={() => setShowPassword(v => !v)}
                         tabIndex={0}
                         aria-label={showPassword ? "Hide password" : "Show password"}
@@ -83,7 +89,7 @@ const ResetPassword = () => {
                 </label>
                 {err && <p className="text-yellow-500 text-xs -mt-4">{err}</p>}
                 <label className="flex flex-col gap-1 relative">
-                    <p className="font-[poppins-semibold] text-[var(--text-tertiary)] text-sm">Confirm Password</p>
+                    {/* <p className="font-[poppins-semibold] text-[var(--text-tertiary)] text-sm">Confirm Password</p> */}
                     <input
                         type={showConfirm ? "text" : "password"}
                         placeholder="Confirm Password"
@@ -93,7 +99,7 @@ const ResetPassword = () => {
                         className="disabled:opacity-50 font-[poppins-medium] disabled:cursor-not-allowed w-full p-1.5 rounded-lg border-3 transition outline-0 text-sm bg-[var(--bg-tertiary)] border-transparent focus:border-[var(--color-primary)]"
                     />
                     <span
-                        className="absolute right-3 top-9 cursor-pointer text-[var(--text-tertiary)]"
+                        className="absolute right-3 top-3 cursor-pointer text-[var(--text-tertiary)]"
                         onClick={() => setShowConfirm(v => !v)}
                         tabIndex={0}
                         aria-label={showConfirm ? "Hide password" : "Show password"}
