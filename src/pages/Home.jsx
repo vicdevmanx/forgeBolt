@@ -37,7 +37,7 @@ export default function Home() {
 
     return (
         <div className="flex flex-col">
-            <div className="flex flex-col gap-4 px-8 max-lg:p-2 justify-center items-center min-h-screen bg-gradient-to-r from-[var(--color-primary)]/10 via-[var(--bg-color)] to-[var-(--color-light)]">
+            <div className="flex flex-col gap-4 px-8 max-lg:p-2 justify-center items-center min-h-[90vh] bg-gradient-to-r from-[var(--color-primary)]/10 via-[var(--bg-color)] to-[var-(--color-light)]">
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}
                     animate={{ opacity: 1, y: 0 }}
