@@ -32,7 +32,7 @@ export const useAuthStore = create((set) => ({
   products: null,
   fetchProducts: async () => {
     try {
-      const res = await API.get('/products')
+      const res = await API.get('/products?limit=18')
       set({ products: res.data.items })
     }
     catch (err) {
@@ -71,6 +71,16 @@ export const useAuthStore = create((set) => ({
     }
   },
   freshMail: null,
-  setFreshMail: (freshMail) => set({ freshMail })
+  setFreshMail: (freshMail) => set({ freshMail }),
+  allUsers : null,
+  getAllUsers : async () => {
+    try{
+      const res =await API.get('/admin/users')
+      console.log(res.data)
+      set({allUsers: res.data})
+    }catch(e){
+      console.log(e)
+    }
+  }
 
 }));

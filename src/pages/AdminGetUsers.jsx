@@ -1,4 +1,4 @@
-export default function AdminUsers() {
+export default function AdminGetUsers() {
   return (
     <div>
       Admin Users Page

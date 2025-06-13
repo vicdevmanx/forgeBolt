@@ -9,13 +9,23 @@ import {
     ListItemText,
     Box,
 } from "@mui/material"
+// Import your auth store hook
+import { useAuthStore } from "@/store/authStore" // Adjust the path as needed
 
 export default function MobileNavModal() {
     const [open, setOpen] = useState(false)
+    const { user } = useAuthStore() // Assumes user object has a 'role' property
 
     const navLinks = [
         { name: "Home", to: "/" },
         { name: "Products", to: "/products" },
+    ]
+
+    // Admin-only links
+    const adminLinks = [
+        { name: "Admin Overview", to: "/admin-overview" },
+        { name: "Create Product", to: "/create-product" },
+        { name: "All Users", to: "/all-users" },
     ]
 
     const toggleDrawer = () => setOpen((prev) => !prev)
@@ -30,7 +40,7 @@ export default function MobileNavModal() {
                     left: 16,
                     zIndex: 1300,
                     borderRadius: '50px',
-                    display: { xs: "block", sm: "none" },
+                    // display: { xs: "block", sm: "none" },
                     backdropFilter: "blur(8px)",
                 }}
             >
@@ -41,7 +51,7 @@ export default function MobileNavModal() {
                         color: "white",
                         border: '2px solid var(--bg-tertiary)',
                         "&:hover": {
-                            backgroundColor: "#059669", // hover emerald-600
+                            backgroundColor: "#059669",
                         },
                         p: 2,
                     }}
@@ -55,50 +65,87 @@ export default function MobileNavModal() {
                 <Box
                     sx={{
                         width: 250,
-                        bgcolor: "var(--bg-secondary)",
+                        bgcolor: "var(--bg-color)",
                         height: "100%",
-                        padding: 2,
+                        padding: 1.5,
                     }}
                     role="presentation"
                     onKeyDown={toggleDrawer}
                 >
-                    <h2
-                        style={{
-                            color: "var(--text-primary)",
-                            fontWeight: "bold",
-                            marginBottom: "1rem",
-                            fontSize: "1.25rem",
-                            fontFamily: "Poppins-bold",
-                        }}
-                    >
-                        <h1 className="font-[poppins-bold] text-2xl max-sm:text-xl">Forge<span className="text-[var(--color-primary)]">&Bolt</span>.</h1>
-                    </h2>
+                     <h1 className="font-[poppins-bold] text-2xl max-sm:text-xl mb-6">
+                        Forge
+                        <span style={{ color: "var(--color-primary)" }}>&amp;Bolt</span>.
+                    </h1>
 
-            <List>
-                {navLinks.map((link) => (
-                    <ListItem
-                        key={link.to}
-                        disablePadding
-                        sx={{ marginBottom: "0.5rem", borderRadius: "6px" }}
-                        onClick={() => setOpen(false)}
-                    >
-                        <NavLink
-                            to={link.to}
-                            style={{ width: "100%", textDecoration: "none" }}
-                            className={({ isActive }) =>
-                                `block px-4 py-1.5 rounded-md bg-[var(--bg-tertiary)] transition font-[poppins-bold] font-bold ${isActive
-                                    ? 'bg-[var(--color-primary)] text-white'
-                                    : 'text-[var(--text-secondary)] hover:text-white hover:bg-[var(--color-primary)]'
-                                }`
-                            }
-                        >
-                            <ListItemText primary={link.name} />
-                        </NavLink>
-                    </ListItem>
-                ))}
-            </List>
-        </Box>
-      
+                    <List>
+                        {navLinks.map((link) => (
+                            <ListItem
+                                key={link.to}
+                                disablePadding
+                                sx={{ marginBottom: "0.5rem", borderRadius: "6px" }}
+                                onClick={() => setOpen(false)}
+                            >
+                                <NavLink
+                                    to={link.to}
+                                    style={{
+                                        width: "100%",
+                                        textDecoration: "none",
+                                        fontFamily: "'Poppins', sans-serif",
+                                        fontWeight: 500,
+                                    }}
+                                    className={({ isActive }) =>
+                                        `block  py-1 text-sm rounded-lg transition font-medium ${isActive
+                                            ? 'px-4 bg-[var(--color-primary)] text-white'
+                                            : 'text-[var(--text-tertiary)] hover:text-white hover:bg-[var(--color-primary)] px-2'
+                                        }`
+                                    }
+                                >
+                                    <ListItemText
+                                        primary={link.name}
+                                        primaryTypographyProps={{
+                                            fontFamily: "'poppins-medium', sans-serif",
+                                            fontWeight: 500,
+                                        }}
+                                    />
+                                </NavLink>
+                            </ListItem>
+                        ))}
+
+                        {/* Admin-only links */}
+                        {user?.role === "admin" && adminLinks.map((link) => (
+                            <ListItem
+                                key={link.to}
+                                disablePadding
+                                sx={{ marginBottom: "0.5rem", borderRadius: "6px" }}
+                                onClick={() => setOpen(false)}
+                            >
+                                <NavLink
+                                    to={link.to}
+                                    style={{
+                                        width: "100%",
+                                        textDecoration: "none",
+                                        fontFamily: "'poppins-medium', sans-serif",
+                                        fontWeight: 500,
+                                    }}
+                                    className={({ isActive }) =>
+                                        `block  py-1 text-sm rounded-lg transition font-medium ${isActive
+                                            ? 'bg-[var(--color-primary)] text-white px-4'
+                                            : 'text-[var(--text-tertiary)] hover:text-white hover:bg-[var(--color-primary)] px-2'
+                                        }`
+                                    }
+                                >
+                                    <ListItemText
+                                        primary={link.name}
+                                        primaryTypographyProps={{
+                                            fontFamily: "'poppins-medium', sans-serif",
+                                            fontWeight: 500,
+                                        }}
+                                    />
+                                </NavLink>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>
             </Drawer>
         </>
     )

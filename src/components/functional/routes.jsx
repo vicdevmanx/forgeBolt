@@ -4,15 +4,15 @@ import Home from "@/pages/Home";
 import Cart from "@/pages/Cart";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
-import AdminOrders from "@/pages/AdminOrders";
-import AdminProducts from "@/pages/AdminProducts";
-import AdminUsers from "@/pages/AdminUsers";
 import Profile from "@/pages/Profile";
 import Register from "@/pages/Register";
 import Checkout from "@/pages/Checkout";
 import Product from "@/pages/Product";
 import Products from "@/pages/Products";
 import ResetPassword from "@/pages/resetPassword";
+import AdminOverview from "@/pages/AdminOverview";
+import AdminCreateProduct from "@/pages/AdminCreateProduct";
+import AdminGetUsers from "@/pages/AdminGetUsers";
 
 export const routes = createBrowserRouter([
   {
@@ -22,9 +22,9 @@ export const routes = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: "cart", element: <Cart /> },
       { path: "login", element: <Login /> },
-      { path: "adminorders", element: <AdminOrders /> },
-      { path: "adminproducts", element: <AdminProducts /> },
-      { path: "adminusers", element: <AdminUsers /> },
+      { path: "admin-overview", element: <AdminOverview /> },
+      { path: "create-product", element: <AdminCreateProduct /> },
+      { path: "all-users", element: <AdminGetUsers /> },
       { path: "profile", element: <Profile /> },
       { path: "register", element: <Register /> },
       { path: "checkout", element: <Checkout /> },
