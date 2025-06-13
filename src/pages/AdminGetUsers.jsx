@@ -8,23 +8,23 @@ export default function AdminGetUsers() {
     {
       id: 1,
       profile_image_url: null,
-      name: "Alice Johnson",
-      email: "alice@example.com",
-      role: "Admin",
+      name: "loading name...",
+      email: "loading email...",
+      role: "loading role...",
     },
     {
       id: 2,
-      profile_image_url: "https://randomuser.me/api/portraits/women/44.jpg",
-      name: "Beth Smith",
-      email: "beth@example.com",
-      role: "User",
+      profile_image_url: null,
+      name: "loading name...",
+      email: "loading email...",
+      role: "loading role...",
     },
     {
       id: 3,
       profile_image_url: null,
-      name: "Carlos Rivera",
-      email: "carlos@example.com",
-      role: "Moderator",
+      name: "loading name...",
+      email: "loading email...",
+      role: "loading role...",
     },
   ]);
   const getAllUsers = useAuthStore(s => s.getAllUsers)
