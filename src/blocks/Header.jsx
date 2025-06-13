@@ -11,7 +11,23 @@ import MobileNavModal from "./mobileNav";
 import { Button } from "@/components/ui/button";
 import CustomDropdown from "./customDropdown";
 import { toast } from "sonner";
+import { useState, useCallback } from "react";
 
+// Media query hook to check if mobile
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  const handleResize = useCallback(() => {
+    setIsMobile(window.innerWidth <= 768);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [handleResize]);
+
+  return isMobile;
+}
 
 export default function Header() {
   const isLoggedIn = useAuthStore(s => !!s.token)
@@ -22,6 +38,7 @@ export default function Header() {
   const { theme, toggleTheme } = useContext(GlobalContext)
   const navigate = useNavigate()
   const logout = useAuthStore((s) => s.logout)
+  const isMobile = useIsMobile();
 
   const logoutFn = () => {
     logout()
@@ -32,9 +49,17 @@ export default function Header() {
   const trigger = (
     <div className="p-2 hover:bg-[var(--bg-tertiary)] active:bg-[var(--bg-tertiary)] rounded-lg flex gap-1 items-end cursor-pointer active:scale-95 transition-transform">
       <User className="size-5" />
-      <h3 className="text-xs text-[var(--text-primary)] font-[poppins-medium]">{user ? user.name?.slice(0,6) || user.name  : "loading"}..</h3>
+      <h3 className="text-xs text-[var(--text-primary)] font-[poppins-medium]">
+        {user && user.name
+          ? isMobile
+            ? `${user.name.slice(0, 6)}${user.name.length > 6 ? "…" : ""}`
+            : user.name
+          : "loading.."}
+      </h3>
     </div>
   )
+
+  // Keep the rest of your component as is
 
   const menuItems = [
     { label: "Profile", onClick: () => navigate("/profile") },

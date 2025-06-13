@@ -9,6 +9,7 @@ import ProductCard from "@/blocks/ProductCard";
 import { useEffect } from "react";
 import { useAuthStore } from "@/store/authStore";
 import { useState } from "react";
+import ProductCardSkeleton from "@/skeleton/productCard.skeleton";
 
 
 export default function Home() {
@@ -20,6 +21,9 @@ export default function Home() {
     const isLoggedIn = useAuthStore(s => s.token)
     const fetchProducts = useAuthStore(s => s.fetchProducts)
     const [recentProducts, setRecentProducts] = useState(null)
+    useEffect(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, []);
     useEffect(() => {
         cart?.length ?
             setTotal(cart.length)
@@ -72,9 +76,9 @@ export default function Home() {
                     <p className="text-sm font-[poppins-medium] max-w-md text-center text-[var(--text-tertiary)] -mt-2 mb-8 p-2 py-0">Hand-picked tools from top brands, loved by professionals</p>
                     <div className="w-full flex justify-center">
                         <div className="flex flex-wrap gap-6 items-center justify-center max-w-6xl mb-8 -mt-4">
-                            {recentProducts && recentProducts.map((product, i) =>
+                            {recentProducts ? recentProducts.map((product, i) =>
                                 <ProductCard product={product} key={i} />
-                            )}
+                            ) : [1,2,3].map((_,i) => <ProductCardSkeleton key={i}/>)}
                         </div>
                     </div>
 

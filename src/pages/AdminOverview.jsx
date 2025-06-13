@@ -22,10 +22,10 @@ export default function AdminOverview() {
   }, [])
 
   return (
-    <div className="min-h-screen p-2 flex flex-col items-center">
-      <h1 className="text-3xl font-[poppins-bold] pt-6 pb-2">
+    <div className="min-h-[80vh] p-2 my-6 flex flex-col items-center">
+      <h2 className="mb-4 font-[poppins-bold] text-2xl">
         Admin Overview
-      </h1>
+      </h2>
       <p className="text-md max-md:text-sm font-[poppins-medium] max-w-xl text-[var(--text-tertiary)]">Manage Your Store Products, Orders and Users </p>
 
       <div className="flex flex-col md:flex-row gap-4 mt-10 w-full max-w-4xl">

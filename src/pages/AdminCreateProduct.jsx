@@ -53,13 +53,13 @@ export default function AdminCreateProduct() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-6">
+    <div className="min-h-[80vh] flex items-center justify-center  p-2 my-6 max-md:my-2">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-xl flex flex-col gap-3 rounded-xl p-2"
+        className="w-full max-w-xl flex flex-col gap-3 rounded-xl"
         style={{ background: "none" }}
       >
-        <h2 className="text-center text-2xl font-[poppins-semibold]">Create Product</h2>
+       <h2 className="mb-4 font-[poppins-bold] text-2xl text-center">Create Product</h2>
         <div className="text-center flex flex-col items-center">
           {preview ? (
             <img

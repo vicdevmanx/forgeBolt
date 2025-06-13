@@ -32,7 +32,7 @@ const ForgotPassword = ({ freshMail='', email ='', classes='flex flex-col gap-2 
   <Lock className="size-5" /> Security Settings</span>}
       <span className={`flex flex-col gap-2 text-[var(--text-tertiary)] font-[poppins-medium] text-xs ${!email && '-mt-4 mb-4 text-center'}`} >
         {email &&<span className="text-sm font-[poppins-semibold] text-[var(--text-secondary)]"> Reset Password</span>}
-        Enter your email address to receive <br /> password reset instructions.</span>
+        {!email && 'Enter your email address to receive <br /> password reset instructions.'}</span>
       <label className="flex flex-col gap-1">
         {email && <p className="font-[poppins-semibold] text-[var(--text-tertiary)] text-sm">Email</p>}
         <input type="text"

@@ -40,8 +40,8 @@ export default function MobileNavModal() {
                     left: 16,
                     zIndex: 1300,
                     borderRadius: '50px',
-                    // display: { xs: "block", sm: "none" },
                     backdropFilter: "blur(8px)",
+                    display: { xs: "block", lg: "none" }, // Hide on lg and up
                 }}
             >
                 <IconButton
@@ -61,7 +61,14 @@ export default function MobileNavModal() {
             </Box>
 
             {/* 🟢 Drawer Navigation */}
-            <Drawer anchor="left" open={open} onClose={toggleDrawer}>
+            <Drawer anchor="left" open={open} onClose={toggleDrawer}
+                sx={{
+                    display: { xs: "block", lg: "none" }, // Hide on lg and up
+                    '& .MuiDrawer-paper': {
+                        display: { xs: "block", lg: "none" },
+                    }
+                }}
+            >
                 <Box
                     sx={{
                         width: 250,
@@ -72,7 +79,7 @@ export default function MobileNavModal() {
                     role="presentation"
                     onKeyDown={toggleDrawer}
                 >
-                     <h1 className="font-[poppins-bold] text-2xl max-sm:text-xl mb-6">
+                     <h1 className="font-[poppins-bold] text-2xl max-sm:text-xl mb-6 text-[var(--text-primary)]">
                         Forge
                         <span style={{ color: "var(--color-primary)" }}>&amp;Bolt</span>.
                     </h1>
