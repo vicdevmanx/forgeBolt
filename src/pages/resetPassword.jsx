@@ -50,7 +50,7 @@ const ResetPassword = () => {
     const [showConfirm, setShowConfirm] = useState(false);
 
     return (
-        <div className="min-h-[80vh] flex items-center justify-center">
+        <div className="min-h-[60vh] flex items-center justify-center p-2">
             <div className="flex-1 w-full min-w-0 max-w-100 md:min-w-90 md:max-w-100 h-auto border-1 border-[var(--bg-tertiary)] flex flex-col gap-5 bg-[var(--bg-secondary)] rounded-lg p-4 max-md:mx-auto"
                 style={{ minWidth: "0" }}>
                 <span className="flex gap-2 text-xl font-[poppins-semibold] items-center text-[var(--text-secondary)]">

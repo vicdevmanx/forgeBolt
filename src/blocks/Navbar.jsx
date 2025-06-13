@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 export default function Navbar() {
-  const isAdmin = useAuthStore(s => s?.user?.role);
+  const {user} = useAuthStore();
 
   return (
     <nav className='flex gap-8 items-center text-md font-[poppins-medium] max-xl:hidden'>
@@ -29,7 +29,7 @@ export default function Navbar() {
         <ShoppingBag size={18} />
         Products
       </NavLink>
-      {isAdmin && (
+      {user?.role == 'admin' && (
         <>
           <NavLink to='/admin-overview' className={({ isActive }) =>
             isActive

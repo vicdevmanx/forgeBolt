@@ -9,19 +9,17 @@ import {
     ListItemText,
     Box,
 } from "@mui/material"
-// Import your auth store hook
-import { useAuthStore } from "@/store/authStore" // Adjust the path as needed
+import { useAuthStore } from "@/store/authStore"
 
 export default function MobileNavModal() {
     const [open, setOpen] = useState(false)
-    const { user } = useAuthStore() // Assumes user object has a 'role' property
+    const { user } = useAuthStore()
 
     const navLinks = [
         { name: "Home", to: "/" },
         { name: "Products", to: "/products" },
     ]
 
-    // Admin-only links
     const adminLinks = [
         { name: "Admin Overview", to: "/admin-overview" },
         { name: "Create Product", to: "/create-product" },
@@ -41,7 +39,14 @@ export default function MobileNavModal() {
                     zIndex: 1300,
                     borderRadius: '50px',
                     backdropFilter: "blur(8px)",
-                    display: { xs: "block", xl: "none" }, // Hide on xl and up
+                    display: {
+                        xs: "block", // 0px+
+                        lg: "block", // 1200px+
+                        xl: "none",  // 1536px+
+                    },
+                    "@media (min-width:1280px)": {
+                        display: "none",
+                    },
                 }}
             >
                 <IconButton
@@ -61,11 +66,28 @@ export default function MobileNavModal() {
             </Box>
 
             {/* 🟢 Drawer Navigation */}
-            <Drawer anchor="left" open={open} onClose={toggleDrawer}
+            <Drawer
+                anchor="left"
+                open={open}
+                onClose={toggleDrawer}
                 sx={{
-                    display: { xs: "block", xl: "none" }, // Hide on xl and up
+                    display: {
+                        xs: "block",
+                        lg: "block",
+                        xl: "none",
+                    },
+                    "@media (min-width:1280px)": {
+                        display: "none",
+                    },
                     '& .MuiDrawer-paper': {
-                        display: { xs: "block", xl: "none" },
+                        display: {
+                            xs: "block",
+                            lg: "block",
+                            xl: "none",
+                        },
+                        "@media (min-width:1280px)": {
+                            display: "none",
+                        },
                     }
                 }}
             >
@@ -79,7 +101,7 @@ export default function MobileNavModal() {
                     role="presentation"
                     onKeyDown={toggleDrawer}
                 >
-                     <h1 className="font-[poppins-bold] text-2xl max-sm:text-xl mb-6 text-[var(--text-primary)]">
+                    <h1 className="font-[poppins-bold] text-2xl max-sm:text-xl mb-6 text-[var(--text-primary)]">
                         Forge
                         <span style={{ color: "var(--color-primary)" }}>&amp;Bolt</span>.
                     </h1>
