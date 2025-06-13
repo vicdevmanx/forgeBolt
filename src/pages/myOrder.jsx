@@ -91,9 +91,6 @@ export default function MyOrder() {
                                                 console.log(res.data)
                                                 window.location.href = res.data.authorization_url; // my url
                                                 setLoading(false)
-                                                toast.success('Done!', {
-                                                    id: tId
-                                                })
                                             } catch (err) {
                                                 console.log(err)
                                             }

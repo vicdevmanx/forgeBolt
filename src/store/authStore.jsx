@@ -103,6 +103,16 @@ export const useAuthStore = create((set) => ({
     } catch (e) {
       console.log(e)
     }
+  },
+  allOrders:null,
+  fetchOrders: async () => {
+    try{
+      const res = await API.get('/admin/orders')
+      console.log(res.data)
+      // set({allOrders: res.data})
+    }catch(e) {
+      console.log(e)
+    }
   }
 
 }));
