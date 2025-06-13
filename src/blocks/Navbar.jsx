@@ -1,42 +1,62 @@
 import { useAuthStore } from '@/store/authStore';
-import { NavLink } from 'react-router-dom'
+import { NavLink } from 'react-router-dom';
+import {
+  Home,
+  ShoppingBag,
+  LayoutDashboard,
+  PlusSquare,
+  Users
+} from 'lucide-react';
 
 export default function Navbar() {
-  // Example: Replace this with your actual admin check logic
-  const isAdmin = useAuthStore(s => s?.user?.role)
+  const isAdmin = useAuthStore(s => s?.user?.role);
 
   return (
     <nav className='flex gap-6 items-center text-md font-[poppins-medium] max-lg:hidden'>
       <NavLink to='/' className={({ isActive }) =>
         isActive
-          ? 'text-[var(--color-primary)] font-semibold'
-          : 'text-[var(--text-tertiary)] hover:text-[var(--color-primary)] transition-colors'
-      }>Home</NavLink>
+          ? 'text-[var(--color-primary)] font-semibold flex items-center gap-2'
+          : 'text-[var(--text-tertiary)] hover:text-[var(--color-primary)] transition-colors flex items-center gap-2'
+      }>
+        <Home size={18} />
+        Home
+      </NavLink>
       <NavLink to='/products' className={({ isActive }) =>
         isActive
-          ? 'text-[var(--color-primary)] font-semibold'
-          : 'text-[var(--text-tertiary)] hover:text-[var(--color-primary)] transition-colors'
-      }>Products</NavLink>
+          ? 'text-[var(--color-primary)] font-semibold flex items-center gap-2'
+          : 'text-[var(--text-tertiary)] hover:text-[var(--color-primary)] transition-colors flex items-center gap-2'
+      }>
+        <ShoppingBag size={18} />
+        Products
+      </NavLink>
       {isAdmin && (
         <>
           <NavLink to='/admin-overview' className={({ isActive }) =>
             isActive
-              ? 'text-[var(--color-primary)] font-semibold'
-              : 'text-[var(--text-tertiary)] hover:text-[var(--color-primary)] transition-colors'
-          }>Admin Overview</NavLink>
+              ? 'text-[var(--color-primary)] font-semibold flex items-center gap-2'
+              : 'text-[var(--text-tertiary)] hover:text-[var(--color-primary)] transition-colors flex items-center gap-2'
+          }>
+            <LayoutDashboard size={18} />
+            Admin Overview
+          </NavLink>
           <NavLink to='/create-product' className={({ isActive }) =>
             isActive
-              ? 'text-[var(--color-primary)] font-semibold'
-              : 'text-[var(--text-tertiary)] hover:text-[var(--color-primary)] transition-colors'
-          }>Create Product</NavLink>
+              ? 'text-[var(--color-primary)] font-semibold flex items-center gap-2'
+              : 'text-[var(--text-tertiary)] hover:text-[var(--color-primary)] transition-colors flex items-center gap-2'
+          }>
+            <PlusSquare size={18} />
+            Create Product
+          </NavLink>
           <NavLink to='/all-users' className={({ isActive }) =>
             isActive
-              ? 'text-[var(--color-primary)] font-semibold'
-              : 'text-[var(--text-tertiary)] hover:text-[var(--color-primary)] transition-colors'
-          }>All Users</NavLink>
+              ? 'text-[var(--color-primary)] font-semibold flex items-center gap-2'
+              : 'text-[var(--text-tertiary)] hover:text-[var(--color-primary)] transition-colors flex items-center gap-2'
+          }>
+            <Users size={18} />
+            All Users
+          </NavLink>
         </>
       )}
     </nav>
   );
 }
-
