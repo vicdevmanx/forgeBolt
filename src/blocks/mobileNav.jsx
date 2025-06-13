@@ -10,10 +10,12 @@ import {
     Box,
 } from "@mui/material"
 import { useAuthStore } from "@/store/authStore"
+import { useNavigate } from 'react-router-dom'
 
 export default function MobileNavModal() {
     const [open, setOpen] = useState(false)
     const { user } = useAuthStore()
+    const navigate = useNavigate()
 
     const navLinks = [
         { name: "Home", to: "/" },
@@ -101,7 +103,7 @@ export default function MobileNavModal() {
                     role="presentation"
                     onKeyDown={toggleDrawer}
                 >
-                    <h1 className="font-[poppins-bold] text-2xl max-sm:text-xl mb-6 text-[var(--text-primary)]">
+                    <h1 className="font-[poppins-bold] text-2xl max-sm:text-xl mb-6 text-[var(--text-primary)] select-none" onClick={() => navigate('/')}>
                         Forge
                         <span style={{ color: "var(--color-primary)" }}>&amp;Bolt</span>.
                     </h1>

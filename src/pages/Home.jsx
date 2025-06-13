@@ -25,7 +25,7 @@ export default function Home() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
     useEffect(() => {
-        cart?.length ?
+        cart !==null && cart.length > 0 ?
             setTotal(cart.length)
             :
            isLoggedIn && getCart().then(() => {
@@ -83,6 +83,15 @@ export default function Home() {
                     </div>
 
 
+                </div>
+                <div className="flex justify-end max-w-6xl mx-auto mb-8 -mt-4">
+                    <button
+                        className="flex items-center text-sm p-2 gap-0 bg-transparent text-[var(--color-primary)] active:bg-[var(--color-primary)]/10 hover:bg-[var(--color-primary)]/10 rounded-xl font-[poppins-semibold]"
+                        onClick={() => navigate('/products')}
+                    >
+                        View More
+                        <ChevronRight className="w-5.5 h-5.5 stroke-2 text-[var(--color-primary)]" />
+                    </button>
                 </div>
                 <div className="py-6 p-2 bg-[var(--color-primary)] flex flex-col gap-2 items-center w-full text-white mt-4">
                     <h1 className="min-lg:text-3xl min-sm:text-2xl text-xl font-[poppins-bold] text-center">Stay Updated With Forge&Bolt</h1>

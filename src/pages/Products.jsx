@@ -54,6 +54,25 @@ export default function Products() {
 
           ) : [1, 2, 3].map((_, i) => <ProductCardSkeleton key={i} />)}
         </div>
+        {/* <div className="flex flex-col items-center gap-2 ml-4">
+          <Button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+            className="mb-2"
+          >
+            Previous
+          </Button>
+          <span className="text-sm">
+            Page {currentPage} of {totalPages}
+          </span>
+          <Button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+            className="mt-2"
+          >
+            Next
+          </Button>
+        </div> */}
       </div>
 
     </motion.div>

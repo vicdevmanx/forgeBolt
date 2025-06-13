@@ -1,11 +1,14 @@
 import API from "@/components/functional/axios";
+import { Button } from "@/components/ui/button";
 import CartItemSkeleton from "@/skeleton/cartItemSkeleton";
 import { useAuthStore } from "@/store/authStore";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useEffect } from "react";
 import { toast } from "sonner";
-
+import { useNavigate } from 'react-router-dom'
+import { ArrowDownLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 
 export default function Cart() {
@@ -28,6 +31,7 @@ export default function Cart() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
+  const navigate = useNavigate()
 
 
   const getCart = useAuthStore(s => s.getCart);
@@ -94,6 +98,7 @@ export default function Cart() {
               Array.from({ length: 3 }).map((_, i) => <CartItemSkeleton key={i} />)
             ) : cartProducts.length > 0 ? (
               cartProducts.map((item) => (
+                <>
                 <motion.div
                   key={item.products.id}
                   whileHover={{ scale: 1.02 }}
@@ -101,7 +106,7 @@ export default function Cart() {
                 >
                   {/* Cancel Button */}
                   <button
-                    className="absolute top-2 right-2 text-[var(--text-tertiary)] hover:text-red-500 hover:bg-red-500/20  transition-colors rounded-full p-1"
+                    className="absolute top-2 right-2 text-[var(--text-tertiary)] hover:text-red-500 hover:bg-red-500/20 active:bg-red-500/20  transition-colors rounded-full p-1"
                     aria-label="Remove item"
                     onClick={() => removeProduct(item.id)}
                   >
@@ -125,14 +130,18 @@ export default function Cart() {
                   <div className="flex flex-col items-end gap-2 min-w-[90px] pt-8">
                     <div className="font-[poppins-bold] text-[var(--text-secondary)]">${item.total_price}</div>
                     {/* Small Counter */}
-                    <div className="flex items-center bg-[var(--bg-tertiary)] rounded-md px-1 py-0.5 gap-1 shadow-inner">
+                    <div className="flex items-center bg-[var(--bg-tertiary)] rounded-md gap-1 shadow-inner">
                       <button
-                        className="text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 rounded-full p-0.5 transition-colors"
+                        className="text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 active:bg-[var(--color-primary)]/10 p-1.5 rounded-md transition-colors"
                         aria-label="Decrease quantity"
                         onClick={async () => {
                           if (item.quantity > 1) {
                             try {
-                              await API.patch(`/cart/${item.id}`, { quantity: item.quantity - 1 });
+                               const toastId = toast.loading('Updating Quantity...')
+                              await API.put(`/cart/${item.id}`, { quantity: item.quantity - 1 });
+                              toast.success('Quantity Updated!', {
+                              id:toastId
+                            })
                               // Refresh cart
                               getCart().then(() => {
                                 const cartItems = useAuthStore.getState().cart;
@@ -145,17 +154,21 @@ export default function Cart() {
                         }}
                         disabled={item.quantity <= 1}
                       >
-                        <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <svg width="21" height="21" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                           <line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
                       </button>
                       <span className="font-[poppins-medium] text-[var(--text-primary)] min-w-[1.5ch] text-center text-sm">{item.quantity}</span>
                       <button
-                        className="text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 rounded-full p-0.5 transition-colors"
+                        className="text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 active:bg-[var(--color-primary)]/10 rounded-md p-1.5 transition-colors"
                         aria-label="Increase quantity"
                         onClick={async () => {
                           try {
-                            await API.patch(`/cart/${item.id}`, { quantity: item.quantity + 1 });
+                            const toastId = toast.loading('Updating Quantity...')
+                            await API.put(`/cart/${item.id}`, { quantity: item.quantity + 1 });
+                            toast.success('Quantity Updated!', {
+                              id:toastId
+                            })
                             // Refresh cart
                             getCart().then(() => {
                               const cartItems = useAuthStore.getState().cart;
@@ -166,17 +179,20 @@ export default function Cart() {
                           }
                         }}
                       >
-                        <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <svg width="21" height="21" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                           <line x1="12" y1="5" x2="12" y2="19" />
                           <line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
                       </button>
                     </div>
                   </div>
-                </motion.div>
+                  </motion.div>
+                   </>
               ))
-            ) : (
-              <p>Nothing in your cart</p>
+            ) : (<div className=' flex flex-col gap-4 text-white items-start pt-4 font-[poppins-medium] bg-[var(--color-primary)]/10 p-4 rounded-lg'>
+              <p className="font-[poppins-bold] text-lg">Your Cart is Empty</p>
+              <Button className='bg-[var(--color-primary)] text-white' onClick={() => navigate('/products')}>Shop for Products</Button>
+              </div>
             )}
           </div>
         </motion.section>
@@ -203,14 +219,17 @@ export default function Cart() {
                 <span>${tax}</span>
               </div>
             </div>
-            <div className="border-t border-[var(--bg-tertiary)] mt-4 pt-4 flex justify-between font-bold text-lg">
+            <div className="border-t border-[var(--bg-tertiary)] mt-4 pt-4 flex justify-between font-[poppins-bold] text-lg">
               <span>Total:</span>
               <span>${fullPrice}</span>
             </div>
           </div>
-          <button className="mt-8 w-full bg-[var(--color-primary)] hover:bg-emerald-650 text-white py-3 rounded-lg font-semibold transition-colors duration-200 shadow">
+          <button className="mt-8 w-full bg-[var(--color-primary)] hover:bg-emerald-650 text-white py-3 rounded-lg text-sm font-[poppins-semibold] transition-colors duration-200">
             Checkout
           </button>
+          {cartProducts != null && cartProducts.length > 0 && <button className='bg-[var(--bg-tertiary)] w-full hover:bg-emerald-650 flex items-center font-[poppins-semibold] justify-center gap-2 text-[var(--text-tertiary)] py-3 rounded-lg font-semibold transition-colors duration-200 mt-2 text-sm' onClick={() => navigate('/products')}
+            ><ArrowLeft/> Continue Shopping for Products</button>}
+              
         </motion.aside>
       </div>
     </>

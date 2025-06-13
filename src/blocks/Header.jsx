@@ -70,8 +70,8 @@ export default function Header() {
 
 
   return (
-    <header className="flex items-center p-3 px-8 max-lg:px-2 sticky top-0 justify-between bg-[var(--bg-color)] border-b border-[var(--bg-tertiary)] z-20">
-      <h1 className="font-[poppins-bold] text-2xl max-sm:text-xl">Forge<span className="text-[var(--color-primary)]">&Bolt</span>.</h1>
+    <header className="flex select-none items-center p-3 px-8 max-lg:px-2 sticky top-0 justify-between bg-[var(--bg-color)] border-b border-[var(--bg-tertiary)] z-20">
+      <h1 className="font-[poppins-bold] text-2xl max-sm:text-xl" onClick={() => navigate('/')}>Forge<span className="text-[var(--color-primary)]">&Bolt</span>.</h1>
       <Navbar />
 
       {

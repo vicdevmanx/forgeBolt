@@ -73,7 +73,7 @@ export default function AdminGetUsers() {
                 <td className="px-2 py-3 font-medium whitespace-nowrap">{user.name}</td>
                 <td className="px-2 py-3 text-[var(--text-secondary)] whitespace-nowrap">{user.email}</td>
                 <td className="px-2 py-3">
-                  <span className={`px-3 py-1 rounded-xl font-[poppins-medium] ${user.role =='admin' ? 'bg-[var(--color-primary)]/30 text-[var(--color-primary)]' : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'} font-medium  text-xs whitespace-nowrap`}>
+                  <span className={`px-3 py-1 rounded-xl font-[poppins-medium] ${user.role =='admin' ? 'bg-[var(--color-primary)]/30 text-[var(--color-primary)] px-5.5' : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'} font-medium  text-xs whitespace-nowrap`}>
                     {user.role}
                   </span>
                 </td>

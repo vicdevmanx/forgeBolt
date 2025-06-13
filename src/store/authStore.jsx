@@ -30,9 +30,9 @@ export const useAuthStore = create((set) => ({
     }
   },
   products: null,
-  fetchProducts: async () => {
+  fetchProducts: async (pageNum = 1) => {
     try {
-      const res = await API.get('/products?limit=18')
+      const res = await API.get(`/products?page=${pageNum}`)
       set({ products: res.data.items })
     }
     catch (err) {
