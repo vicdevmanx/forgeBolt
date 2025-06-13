@@ -47,6 +47,14 @@ export default function AdminCreateProduct() {
       toast.success('Product Created!', {
         id: toastId
       })
+      setForm({
+        title: "",
+        description: "",
+        category: "",
+        stock_count: "",
+        price: "",
+      });
+      navigate('/')
     } catch (e) {
       console.log(e)
     }
@@ -59,7 +67,7 @@ export default function AdminCreateProduct() {
         className="w-full max-w-xl flex flex-col gap-3 rounded-xl"
         style={{ background: "none" }}
       >
-       <h2 className="mb-4 font-[poppins-bold] text-2xl text-center">Create Product</h2>
+        <h2 className="mb-4 font-[poppins-bold] text-2xl text-center">Create Product</h2>
         <div className="text-center flex flex-col items-center">
           {preview ? (
             <img

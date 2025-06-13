@@ -9,6 +9,8 @@ import { toast } from "sonner";
 import { useNavigate } from 'react-router-dom'
 import { ArrowDownLeft } from "lucide-react";
 import { ArrowLeft } from "lucide-react";
+import { formControlLabelClasses } from "@mui/material";
+import { Loader } from "lucide-react";
 
 
 export default function Cart() {
@@ -29,7 +31,7 @@ export default function Cart() {
   //   },
   // ];
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0 });
   }, []);
   const navigate = useNavigate()
 
@@ -42,6 +44,7 @@ export default function Cart() {
   const [totalPrice, setTotalPrice] = useState(0)
   const [loadingCart, setLoadingCart] = useState(false)
   const [cartProducts, setCartProduct] = useState(null);
+  const [loading, setLoading] = useState(false)
 
 
   const removeProduct = async (id) => {
@@ -69,12 +72,12 @@ export default function Cart() {
         setTotal(cartItems.length)
         // Calculate the total price of all items in the cart
         const totalPrice = cartItems.reduce((sum, item) => sum + item.total_price, 0);
-        const tax = ((totalPrice * 6) / 100).toFixed(2);
+        // const tax = ((totalPrice * 6) / 100).toFixed(2);
+        const tax = 0;
         const fullPrice = (Number(totalPrice) + Number(tax)).toFixed(2)
         setTotalPrice(totalPrice.toFixed(2));
         setTax(tax)
         setFullPrice(fullPrice)
-        console.log('cartPage', cartItems)
       })
       .catch((err) => {
         toast.error('Failed to fetch product details');
@@ -99,100 +102,100 @@ export default function Cart() {
             ) : cartProducts.length > 0 ? (
               cartProducts.map((item) => (
                 <>
-                <motion.div
-                  key={item.products.id}
-                  whileHover={{ scale: 1.02 }}
-                  className="relative flex items-center bg-[var(--bg-secondary)] border border-[var(--bg-tertiary)] rounded-lg p-2 gap-2"
-                >
-                  {/* Cancel Button */}
-                  <button
-                    className="absolute top-2 right-2 text-[var(--text-tertiary)] hover:text-red-500 hover:bg-red-500/20 active:bg-red-500/20  transition-colors rounded-full p-1"
-                    aria-label="Remove item"
-                    onClick={() => removeProduct(item.id)}
+                  <motion.div
+                    key={item.products.id}
+                    whileHover={{ scale: 1.02 }}
+                    className="relative flex items-center bg-[var(--bg-secondary)] border border-[var(--bg-tertiary)] rounded-lg p-2 gap-2"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                  <img
-                    src={item.products.image_url}
-                    alt={item.products.name}
-                    className="w-24 h-24 object-cover rounded"
-                  />
-                  <div className="flex-1">
-                    <div className="font-[poppins-semibold] text-[var(--text-primary)]">{item.products.name}</div>
-                    {/* Quantity Text */}
-                    <div className="mt-2 text-xs text-[var(--text-tertiary)] font-[poppins-medium]">
-                      Quantity: {item.quantity}
+                    {/* Cancel Button */}
+                    <button
+                      className="absolute top-2 right-2 text-[var(--text-tertiary)] hover:text-red-500 hover:bg-red-500/20 active:bg-red-500/20  transition-colors rounded-full p-1"
+                      aria-label="Remove item"
+                      onClick={() => removeProduct(item.id)}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                    <img
+                      src={item.products.image_url}
+                      alt={item.products.name}
+                      className="w-24 h-24 object-cover rounded"
+                    />
+                    <div className="flex-1">
+                      <div className="font-[poppins-semibold] text-[var(--text-primary)]">{item.products.name}</div>
+                      {/* Quantity Text */}
+                      <div className="mt-2 text-xs text-[var(--text-tertiary)] font-[poppins-medium]">
+                        Quantity: {item.quantity}
+                      </div>
                     </div>
-                  </div>
-                  {/* Price & Counter to the right */}
-                  <div className="flex flex-col items-end gap-2 min-w-[90px] pt-8">
-                    <div className="font-[poppins-bold] text-[var(--text-secondary)]">${item.total_price}</div>
-                    {/* Small Counter */}
-                    <div className="flex items-center bg-[var(--bg-tertiary)] rounded-md gap-1 shadow-inner">
-                      <button
-                        className="text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 active:bg-[var(--color-primary)]/10 p-1.5 rounded-md transition-colors"
-                        aria-label="Decrease quantity"
-                        onClick={async () => {
-                          if (item.quantity > 1) {
+                    {/* Price & Counter to the right */}
+                    <div className="flex flex-col items-end gap-2 min-w-[90px] pt-8">
+                      <div className="font-[poppins-bold] text-[var(--text-secondary)]">${item.total_price}</div>
+                      {/* Small Counter */}
+                      <div className="flex items-center bg-[var(--bg-tertiary)] rounded-md gap-1 shadow-inner">
+                        <button
+                          className="text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 active:bg-[var(--color-primary)]/10 p-1.5 rounded-md transition-colors"
+                          aria-label="Decrease quantity"
+                          onClick={async () => {
+                            if (item.quantity > 1) {
+                              try {
+                                const toastId = toast.loading('Updating Quantity...')
+                                await API.put(`/cart/${item.id}`, { quantity: item.quantity - 1 });
+                                toast.success('Quantity Updated!', {
+                                  id: toastId
+                                })
+                                // Refresh cart
+                                getCart().then(() => {
+                                  const cartItems = useAuthStore.getState().cart;
+                                  setCartProduct(cartItems);
+                                });
+                              } catch (e) {
+                                toast.error('Failed to decrease quantity');
+                              }
+                            }
+                          }}
+                          disabled={item.quantity <= 1}
+                        >
+                          <svg width="21" height="21" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          </svg>
+                        </button>
+                        <span className="font-[poppins-medium] text-[var(--text-primary)] min-w-[1.5ch] text-center text-sm">{item.quantity}</span>
+                        <button
+                          className="text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 active:bg-[var(--color-primary)]/10 rounded-md p-1.5 transition-colors"
+                          aria-label="Increase quantity"
+                          onClick={async () => {
                             try {
-                               const toastId = toast.loading('Updating Quantity...')
-                              await API.put(`/cart/${item.id}`, { quantity: item.quantity - 1 });
+                              const toastId = toast.loading('Updating Quantity...')
+                              await API.put(`/cart/${item.id}`, { quantity: item.quantity + 1 });
                               toast.success('Quantity Updated!', {
-                              id:toastId
-                            })
+                                id: toastId
+                              })
                               // Refresh cart
                               getCart().then(() => {
                                 const cartItems = useAuthStore.getState().cart;
                                 setCartProduct(cartItems);
                               });
                             } catch (e) {
-                              toast.error('Failed to decrease quantity');
+                              toast.error('Failed to increase quantity');
                             }
-                          }
-                        }}
-                        disabled={item.quantity <= 1}
-                      >
-                        <svg width="21" height="21" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                      </button>
-                      <span className="font-[poppins-medium] text-[var(--text-primary)] min-w-[1.5ch] text-center text-sm">{item.quantity}</span>
-                      <button
-                        className="text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 active:bg-[var(--color-primary)]/10 rounded-md p-1.5 transition-colors"
-                        aria-label="Increase quantity"
-                        onClick={async () => {
-                          try {
-                            const toastId = toast.loading('Updating Quantity...')
-                            await API.put(`/cart/${item.id}`, { quantity: item.quantity + 1 });
-                            toast.success('Quantity Updated!', {
-                              id:toastId
-                            })
-                            // Refresh cart
-                            getCart().then(() => {
-                              const cartItems = useAuthStore.getState().cart;
-                              setCartProduct(cartItems);
-                            });
-                          } catch (e) {
-                            toast.error('Failed to increase quantity');
-                          }
-                        }}
-                      >
-                        <svg width="21" height="21" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                          <line x1="12" y1="5" x2="12" y2="19" />
-                          <line x1="5" y1="12" x2="19" y2="12" />
-                        </svg>
-                      </button>
+                          }}
+                        >
+                          <svg width="21" height="21" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
-                  </div>
                   </motion.div>
-                   </>
+                </>
               ))
             ) : (<div className=' flex flex-col gap-4 text-white items-start pt-4 font-[poppins-medium] bg-[var(--color-primary)]/10 p-4 rounded-lg'>
               <p className="font-[poppins-bold] text-lg">Your Cart is Empty</p>
               <Button className='bg-[var(--color-primary)] text-white' onClick={() => navigate('/products')}>Shop for Products</Button>
-              </div>
+            </div>
             )}
           </div>
         </motion.section>
@@ -224,12 +227,32 @@ export default function Cart() {
               <span>${fullPrice}</span>
             </div>
           </div>
-          <button className="mt-8 w-full bg-[var(--color-primary)] hover:bg-emerald-650 text-white py-3 rounded-lg text-sm font-[poppins-semibold] transition-colors duration-200">
-            Checkout
+          <button onClick={async () => {
+            try {
+              const toastId = toast.loading('Checking Out')
+              setLoading(true)
+              const res = await API.post('/orders')
+              toast.success('Check Out Successful', {
+                id: toastId
+              })
+              navigate('/my-order')
+              setLoading(false)
+              console.log(res.data)
+            } catch (e) {
+              console.log(e)
+              setLoading(false)
+            }
+          }} disabled={loading}
+            className="mt-8 w-full bg-[var(--color-primary)] hover:bg-emerald-650 flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3 rounded-lg text-sm font-[poppins-semibold] transition-colors duration-200">
+            {loading ?
+              <> <Loader size='16px' /> <p>Checking Out...</p></>
+              :
+              <p> Check Out </p>
+            }
           </button>
           {cartProducts != null && cartProducts.length > 0 && <button className='bg-[var(--bg-tertiary)] w-full hover:bg-emerald-650 flex items-center font-[poppins-semibold] justify-center gap-2 text-[var(--text-tertiary)] py-3 rounded-lg font-semibold transition-colors duration-200 mt-2 text-sm' onClick={() => navigate('/products')}
-            ><ArrowLeft/> Continue Shopping for Products</button>}
-              
+          ><ArrowLeft /> Continue Shoppings</button>}
+
         </motion.aside>
       </div>
     </>

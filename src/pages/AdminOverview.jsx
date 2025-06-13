@@ -1,3 +1,4 @@
+import Orders from "@/blocks/allOrders";
 import { useAuthStore } from "@/store/authStore";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -48,6 +49,7 @@ export default function AdminOverview() {
           <span className="text-xl font-[poppins-semibold]">Total Users</span>
         </div>
       </div>
+      <Orders/>
     </div>
   );
 }

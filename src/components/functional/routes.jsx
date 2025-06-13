@@ -13,6 +13,7 @@ import ResetPassword from "@/pages/resetPassword";
 import AdminOverview from "@/pages/AdminOverview";
 import AdminCreateProduct from "@/pages/AdminCreateProduct";
 import AdminGetUsers from "@/pages/AdminGetUsers";
+import MyOrder from "@/pages/myOrder";
 
 export const routes = createBrowserRouter([
   {
@@ -30,7 +31,8 @@ export const routes = createBrowserRouter([
       { path: "checkout", element: <Checkout /> },
       { path: "products/:id", element: <Product /> },
       { path: "products", element: <Products /> },
-       { path: "reset-password", element: <ResetPassword /> },
+      { path: "my-order", element: <MyOrder /> },
+      { path: "reset-password", element: <ResetPassword /> },
       { path: "*", element: <NotFound /> },
     ],
   },

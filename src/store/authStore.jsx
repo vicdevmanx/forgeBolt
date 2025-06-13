@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import Cookies from "js-cookie";
 import API from "@/components/functional/axios";
+import MyOrder from "@/pages/myOrder";
 
 export const useAuthStore = create((set) => ({
   user: null,
@@ -30,10 +31,22 @@ export const useAuthStore = create((set) => ({
     }
   },
   products: null,
-  fetchProducts: async (pageNum = 1) => {
+  totalPages: 1,
+  currentPage: 1,
+  setCurrentPage: (currentPage) => set({ currentPage }),
+  setTotalPages: (totalPages) => set({ totalPages }),
+  fetchProducts: async () => {
     try {
-      const res = await API.get(`/products?page=${pageNum}`)
-      set({ products: res.data.items })
+      set((state) => {
+        API.get(`/products?page=${state.currentPage}`)
+          .then(res => {
+            set({ products: res.data.items, totalPages: res.data.totalPages });
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        return {};
+      });
     }
     catch (err) {
       console.log(err)
@@ -65,20 +78,29 @@ export const useAuthStore = create((set) => ({
     try {
       const res = await API.get('/cart')
       set({ cart: res.data.items })
-      console.log(res.data)
     } catch (e) {
       console.log(e)
     }
   },
   freshMail: null,
   setFreshMail: (freshMail) => set({ freshMail }),
-  allUsers : null,
-  getAllUsers : async () => {
-    try{
-      const res =await API.get('/admin/users')
+  allUsers: null,
+  getAllUsers: async () => {
+    try {
+      const res = await API.get('/admin/users')
       console.log(res.data)
-      set({allUsers: res.data})
-    }catch(e){
+      set({ allUsers: res.data })
+    } catch (e) {
+      console.log(e)
+    }
+  },
+  myOrders: null,
+  fetchMyOrders: async () => {
+    try {
+      const res = await API.get('/orders')
+      console.log(res.data)
+      set({myOrders: res.data})
+    } catch (e) {
       console.log(e)
     }
   }

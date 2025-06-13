@@ -12,7 +12,7 @@ export default function Navbar() {
   const {user} = useAuthStore();
 
   return (
-    <nav className='flex gap-8 items-center text-md font-[poppins-medium] max-xl:hidden'>
+    <nav className='flex gap-8 items-center text-sm font-[poppins-medium] max-xl:hidden'>
       <NavLink to='/' className={({ isActive }) =>
         isActive
           ? 'text-[var(--color-primary)] font-semibold flex items-center gap-2'

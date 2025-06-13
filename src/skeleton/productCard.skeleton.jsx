@@ -5,10 +5,10 @@ import { Heart, ShoppingCart } from 'lucide-react'
 const ProductCardSkeleton = ({ variant = 'default' }) => {
     const cardClasses = variant === 'compact'
         ? 'group relative bg-[var(--bg-secondary)] rounded-lg border border-[var(--bg-tertiary)] w-screen min-w-80 max-w-58 flex flex-col flex-grow'
-        : 'group relative bg-[var(--bg-secondary)] rounded-xl border border-[var(--bg-tertiary)] overflow-hidden w-screen min-w-58 max-w-88 flex flex-col flex-grow';
+        : 'group relative bg-[var(--bg-secondary)] rounded-xl border border-[var(--bg-tertiary)] overflow-hidden w-screen min-w-70 max-w-88 flex flex-col flex-grow';
 
     return (
-        <div className={cardClasses} style={{ minHeight: 0, flex: 1, height: '100%', maxHeight: '30rem' }}>
+        <div className={cardClasses} style={{ minHeight: 0, flex: 1, height: '100%', maxHeight: '25.5rem' }}>
             {/* Image Placeholder */}
             <div className={`relative -mt-1 ${variant === 'compact' ? 'aspect-square' : 'aspect-[4/2.5]'} overflow-hidden ${variant === 'compact' ? 'rounded-t-lg' : 'rounded-t-xl'}`}>
                 <Skeleton
