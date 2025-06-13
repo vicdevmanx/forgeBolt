@@ -41,7 +41,7 @@ export default function MobileNavModal() {
                     zIndex: 1300,
                     borderRadius: '50px',
                     backdropFilter: "blur(8px)",
-                    display: { xs: "block", lg: "none" }, // Hide on lg and up
+                    display: { xs: "block", xl: "none" }, // Hide on xl and up
                 }}
             >
                 <IconButton
@@ -63,9 +63,9 @@ export default function MobileNavModal() {
             {/* 🟢 Drawer Navigation */}
             <Drawer anchor="left" open={open} onClose={toggleDrawer}
                 sx={{
-                    display: { xs: "block", lg: "none" }, // Hide on lg and up
+                    display: { xs: "block", xl: "none" }, // Hide on xl and up
                     '& .MuiDrawer-paper': {
-                        display: { xs: "block", lg: "none" },
+                        display: { xs: "block", xl: "none" },
                     }
                 }}
             >
