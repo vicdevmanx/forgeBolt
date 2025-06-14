@@ -48,6 +48,7 @@ export default function Cart() {
   const [loading, setLoading] = useState(false)
 
   const [removingId, setRemovingId] = useState(null);
+  const [incLoading, setIncLoading] = useState(false)
 
   const removeProduct = async (id) => {
     if (removingId === id) return; // Prevent multiple calls for the same item
@@ -146,9 +147,11 @@ export default function Cart() {
                           className="text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 active:bg-[var(--color-primary)]/10 p-1.5 rounded-md transition-colors"
                           aria-label="Decrease quantity"
                           onClick={async () => {
+                            if(!incLoading) return
                             if (item.quantity > 1) {
                               try {
                                 const toastId = toast.loading('Updating Quantity...')
+                                setIncLoading(true)
                                 await API.put(`/cart/${item.id}`, { quantity: item.quantity - 1 });
                                 toast.success('Quantity Updated!', {
                                   id: toastId
@@ -158,9 +161,10 @@ export default function Cart() {
                                   const cartItems = useAuthStore.getState().cart;
                                   setCartProduct(cartItems);
                                 });
+                                setIncLoading(false)
                               } catch (e) {
                                 toast.error('Failed to decrease quantity');
-                                
+                                 setIncLoading(false)
                               }
                             }
                           }}
@@ -175,8 +179,10 @@ export default function Cart() {
                           className="text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 active:bg-[var(--color-primary)]/10 rounded-md p-1.5 transition-colors"
                           aria-label="Increase quantity"
                           onClick={async () => {
+                            if(incLoading) return
                             try {
                               const toastId = toast.loading('Updating Quantity...')
+                              setIncLoading(true)
                               await API.put(`/cart/${item.id}`, { quantity: item.quantity + 1 });
                               toast.success('Quantity Updated!', {
                                 id: toastId
@@ -186,9 +192,10 @@ export default function Cart() {
                                 const cartItems = useAuthStore.getState().cart;
                                 setCartProduct(cartItems);
                               });
+                              setIncLoading(false)
                             } catch (e) {
                               toast.error('Failed to increase quantity');
-                            
+                            setIncLoading(false)
                             }
                           }}
                         >
