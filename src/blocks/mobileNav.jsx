@@ -20,6 +20,7 @@ export default function MobileNavModal() {
     const navLinks = [
         { name: "Home", to: "/" },
         { name: "Products", to: "/products" },
+         { name: "  My Orders", to: "/my-order" },
     ]
 
     const adminLinks = [

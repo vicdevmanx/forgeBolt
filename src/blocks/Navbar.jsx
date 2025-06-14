@@ -29,6 +29,14 @@ export default function Navbar() {
         <ShoppingBag size={18} />
         Products
       </NavLink>
+       <NavLink to='/my-order' className={({ isActive }) =>
+            isActive
+              ? 'text-[var(--color-primary)] font-semibold flex items-center gap-2'
+              : 'text-[var(--text-tertiary)] hover:text-[var(--color-primary)] transition-colors flex items-center gap-2'
+          }>
+            <Users size={18} />
+            My Orders
+          </NavLink>
       {user?.role == 'admin' && (
         <>
           <NavLink to='/admin-overview' className={({ isActive }) =>
@@ -55,6 +63,7 @@ export default function Navbar() {
             <Users size={18} />
             All Users
           </NavLink>
+          
         </>
       )}
     </nav>

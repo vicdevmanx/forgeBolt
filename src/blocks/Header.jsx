@@ -44,6 +44,7 @@ export default function Header() {
     logout()
     navigate('/')
     toast.info('You Logged Out')
+    window.location.reload()
   }
 
   const trigger = (
