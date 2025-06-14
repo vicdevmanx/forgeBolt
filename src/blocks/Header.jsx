@@ -42,8 +42,9 @@ export default function Header() {
 
   const logoutFn = () => {
     logout()
-    navigate('/')
+  
     toast.info('You Logged Out')
+      navigate('/')
     window.location.reload()
   }
 

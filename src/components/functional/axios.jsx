@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const API = axios.create({
-  baseURL: "https://forge-bolt.vercel.app"
+  baseURL: "https://forge-bolt.up.railway.app"
 });
 
 API.interceptors.request.use((config) => {
