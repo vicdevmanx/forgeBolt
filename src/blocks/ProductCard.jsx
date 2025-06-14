@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { useAuthStore } from '@/store/authStore';
 import { toast } from 'sonner';
 import { Loader } from 'lucide-react';
+import { useEffect } from 'react';
+import API from '@/components/functional/axios';
 
 const ProductCard = ({ product = {
   id: "1",
@@ -25,6 +27,7 @@ const ProductCard = ({ product = {
   const getCart = useAuthStore(s => s.getCart)
   const setTotal = useAuthStore(s => s.setTotal)
   const isLoggedIn = useAuthStore(s => s.token)
+  const [available, setAvailable] = useState(null)
   const handleAddToCart = (e) => {
     if (!isLoggedIn) {
       e.preventDefault();
@@ -39,6 +42,7 @@ const ProductCard = ({ product = {
       toast.success('Product added to cart!')
       getCart().then(() => {
         const cart = useAuthStore.getState().cart
+        setAvailable(cart.find((item) => item.products.id == product.id))
         setTotal(cart.length)
         setLoading(false)
       })
@@ -46,6 +50,21 @@ const ProductCard = ({ product = {
       fetchProducts()
     });
   };
+
+  useEffect(() => {
+    // Use sync state if cart is already loaded, else fetch
+    const cart = useAuthStore.getState().cart;
+    if (cart && Array.isArray(cart)) {
+      setAvailable(cart.find((item) => item.products.id == product.id));
+      setTotal(cart.length);
+    } else {
+      getCart().then(() => {
+        const updatedCart = useAuthStore.getState().cart;
+        setAvailable(updatedCart.find((item) => item.products.id == product.id));
+        setTotal(updatedCart.length);
+      });
+    }
+  }, [product.id]);
 
   const handleLike = (e) => {
     e.preventDefault();
@@ -142,7 +161,62 @@ const ProductCard = ({ product = {
           </div>
 
           {/* Add to Cart Button */}
-          {variant !== 'compact' && (
+          {available ?
+
+            <div className="flex items-center gap-2 w-full mt-2">
+              <button
+                onClick={async (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (available.quantity > 1) {
+                    try {
+                      setLoading(true);
+                      const toastId = toast.loading('Updating Quantity...')
+                      const res = await API.put(`/cart/${available.id}`, { quantity: available.quantity - 1 });
+                      setAvailable(res.data)
+                      toast.success('Quantity Updated!', {
+                        id: toastId
+                      })
+                    } catch (e) {
+                      toast.error('Failed to decrease quantity');
+                      console.log(e)
+                    } finally {
+                      setLoading(false);
+                    }
+                  }
+                }}
+                disabled={available.quantity <= 1 || loading}
+                className="flex-1 px-3 py-1.5 rounded-l-lg bg-[var(--color-primary)] text-white disabled:opacity-50 w-full"
+                aria-label="Decrease quantity"
+              >-</button>
+              <span className="px-4 py-1.5 bg-[var(--bg-tertiary)] rounded font-[poppins-medium] w-full text-center flex-1">
+                {available.quantity}
+              </span>
+              <button
+                onClick={async (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  try {
+                    setLoading(true);
+                    const toastId = toast.loading('Updating Quantity...');
+                    const res = await API.put(`/cart/${available.id}`, { quantity: available.quantity + 1 });
+                    setAvailable(res.data)
+                    toast.success('Quantity Updated!', {
+                      id: toastId
+                    });
+                  } catch (e) {
+                    toast.error('Failed to increase quantity');
+                    console.log(e);
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading || available.quantity >= product.stock_count}
+                className="flex-1 px-3 py-1.5 rounded-r-lg bg-[var(--color-primary)] text-white disabled:opacity-50 w-full"
+                aria-label="Increase quantity"
+              >+</button>
+            </div>
+            :
             <button
               onClick={handleAddToCart}
               disabled={product.stock_count === 0 || loading}
@@ -156,7 +230,7 @@ const ProductCard = ({ product = {
                 :
                 <>{product.stock_count === 0 ? 'Out of Stock' : 'Add to Cart'}</>}
             </button>
-          )}
+          }
         </div>
       </div>
     </Link>

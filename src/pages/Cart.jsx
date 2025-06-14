@@ -11,6 +11,7 @@ import { ArrowDownLeft } from "lucide-react";
 import { ArrowLeft } from "lucide-react";
 import { formControlLabelClasses } from "@mui/material";
 import { Loader } from "lucide-react";
+import { ShoppingBasket } from "lucide-react";
 
 
 export default function Cart() {
@@ -46,20 +47,27 @@ export default function Cart() {
   const [cartProducts, setCartProduct] = useState(null);
   const [loading, setLoading] = useState(false)
 
+  const [removingId, setRemovingId] = useState(null);
 
   const removeProduct = async (id) => {
+    if (removingId === id) return; // Prevent multiple calls for the same item
+    setRemovingId(id);
     try {
-      setLoadingCart(true)
-      const toastId = toast.loading('Removing Item...')
-      const res = await API.delete(`/cart/${id}`)
-      toast.success('Item Removed From Cart!', {
-        id: toastId
-      })
-      setLoadingCart(false)
-    }
-    catch (e) {
-      console.log(e)
-      setLoadingCart(false)
+      const toastId = toast.loading('Removing Item...');
+      await API.delete(`/cart/${id}`);
+      toast.success('Item Removed From Cart!', { id: toastId });
+      // Refresh cart from server after successful removal
+      await getCart();
+      setCartProduct(useAuthStore.getState().cart);
+      setTotal(useAuthStore.getState().cart.length);
+    } catch (e) {
+      toast.error('Failed to remove item');
+      // Optionally refresh cart to ensure UI is in sync
+      await getCart();
+      setCartProduct(useAuthStore.getState().cart);
+      setTotal(useAuthStore.getState().cart.length);
+    } finally {
+      setRemovingId(null);
     }
   }
 
@@ -152,6 +160,7 @@ export default function Cart() {
                                 });
                               } catch (e) {
                                 toast.error('Failed to decrease quantity');
+                                
                               }
                             }
                           }}
@@ -179,6 +188,7 @@ export default function Cart() {
                               });
                             } catch (e) {
                               toast.error('Failed to increase quantity');
+                            
                             }
                           }}
                         >
@@ -192,8 +202,9 @@ export default function Cart() {
                   </motion.div>
                 </>
               ))
-            ) : (<div className=' flex flex-col gap-4 text-white items-start pt-4 font-[poppins-medium] bg-[var(--color-primary)]/10 p-4 rounded-lg'>
+            ) : (<div className=' flex flex-col gap-4 items-start pt-4 font-[poppins-medium] bg-[var(--bg-secondary)] text-[var(--color-primary)]  p-4 rounded-lg'>
               <p className="font-[poppins-bold] text-lg">Your Cart is Empty</p>
+              <ShoppingBasket className="size-12"/>
               <Button className='bg-[var(--color-primary)] text-white' onClick={() => navigate('/products')}>Shop for Products</Button>
             </div>
             )}
@@ -229,6 +240,10 @@ export default function Cart() {
           </div>
           <button onClick={async () => {
             try {
+              if(cartProducts != null && cartProducts.length == 0) {
+                toast.info('Theres no Item in your cart')
+                return
+              }
               const toastId = toast.loading('Checking Out')
               setLoading(true)
               const res = await API.post('/orders')

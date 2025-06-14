@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import Cookies from "js-cookie";
 import API from "@/components/functional/axios";
-import MyOrder from "@/pages/myOrder";
 
 export const useAuthStore = create((set) => ({
   user: null,
@@ -33,6 +32,7 @@ export const useAuthStore = create((set) => ({
   products: null,
   totalPages: 1,
   currentPage: 1,
+  totalPosts: 0,
   setCurrentPage: (currentPage) => set({ currentPage }),
   setTotalPages: (totalPages) => set({ totalPages }),
   fetchProducts: async () => {
@@ -41,6 +41,7 @@ export const useAuthStore = create((set) => ({
         API.get(`/products?page=${state.currentPage}`)
           .then(res => {
             set({ products: res.data.items, totalPages: res.data.totalPages });
+            set({totalPosts: res.data.total})
           })
           .catch(err => {
             console.log(err);
@@ -109,7 +110,7 @@ export const useAuthStore = create((set) => ({
     try{
       const res = await API.get('/admin/orders')
       console.log(res.data)
-      // set({allOrders: res.data})
+      set({allOrders: res.data})
     }catch(e) {
       console.log(e)
     }

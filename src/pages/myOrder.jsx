@@ -65,7 +65,7 @@ export default function MyOrder() {
                                     <td className="px-2 py-3 text-[var(--text-secondary)] whitespace-nowrap">{product.quantity}</td>
                                     <td className="px-2 py-3 text-[var(--text-secondary)] whitespace-nowrap">{product.products.price}</td>
                                     <td className="px-2 py-3">
-                                        <span className={`px-3 py-1 rounded-xl font-[poppins-medium] ${order.status == 'admin' ? 'bg-[var(--color-primary)]/30 text-[var(--color-primary)] px-5.5' : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'} font-medium  text-xs whitespace-nowrap`}>
+                                          <span className={`px-3 py-1 rounded-xl font-[poppins-medium] ${order.status == 'shipped' && 'bg-[var(--color-primary)]/30 text-[var(--color-primary)]'} ${order.status == 'payed' ? 'bg-orange-400/30' : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'} font-medium  text-xs whitespace-nowrap`}>
                                             {order.status}
                                         </span>
                                     </td>

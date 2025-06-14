@@ -25,22 +25,26 @@ export default function Home() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
     useEffect(() => {
-        cart !==null && cart.length > 0 ?
-            setTotal(cart.length)
-            :
-           isLoggedIn && getCart().then(() => {
-                const cart = useAuthStore.getState().cart
-                setTotal(cart.length)
-            })
+        // Always update cart and total on mount or when dependencies change
+        const updateCartAndTotal = async () => {
+            let currentCart = useAuthStore.getState().cart;
+            if (isLoggedIn) {
+                await getCart();
+                currentCart = useAuthStore.getState().cart;
+            }
+            setTotal(currentCart ? currentCart.length : 0);
+        };
+        updateCartAndTotal();
+
         if (products) {
-            setRecentProducts(products?.slice(0, 3))
+            setRecentProducts(products?.slice(0, 3));
         } else {
             fetchProducts().then(() => {
-                const products = useAuthStore.getState().products
-                setRecentProducts(products?.slice(0, 3))
-            })
+                const products = useAuthStore.getState().products;
+                setRecentProducts(products?.slice(0, 3));
+            });
         }
-    }, [products, fetchProducts])
+    }, [products, fetchProducts, isLoggedIn]);
 
     return (
         <div className="flex flex-col">
@@ -75,7 +79,7 @@ export default function Home() {
                     <h1 className=" text-3xl font-[poppins-bold]">Popular Products</h1>
                     <p className="text-sm font-[poppins-medium] max-w-md text-center text-[var(--text-tertiary)] -mt-2 mb-8 p-2 py-0">Hand-picked tools from top brands, loved by professionals</p>
                     <div className="w-full flex justify-center">
-                        <div className="flex flex-wrap gap-6 items-center justify-center max-w-6xl mb-8 -mt-4">
+                        <div className="flex flex-wrap gap-4 items-center justify-center max-w-6xl mb-8 -mt-4">
                             {recentProducts ? recentProducts.map((product, i) =>
                                 <ProductCard product={product} key={i} />
                             ) : [1,2,3].map((_,i) => <ProductCardSkeleton key={i}/>)}
