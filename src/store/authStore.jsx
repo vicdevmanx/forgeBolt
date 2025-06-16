@@ -15,6 +15,8 @@ export const useAuthStore = create((set) => ({
     Cookies.remove("token");
     set({ user: null, token: null });
   },
+  disableAll: false,
+  setDisableAll: (value) => set({ disableAll: value }),
   loginModalOpen: false,
   openLoginModal: () => set({ loginModalOpen: true }),
   closeLoginModal: () => set({ loginModalOpen: false }),
@@ -41,7 +43,7 @@ export const useAuthStore = create((set) => ({
         API.get(`/products?page=${state.currentPage}`)
           .then(res => {
             set({ products: res.data.items, totalPages: res.data.totalPages });
-            set({totalPosts: res.data.total})
+            set({ totalPosts: res.data.total })
           })
           .catch(err => {
             console.log(err);
@@ -100,18 +102,18 @@ export const useAuthStore = create((set) => ({
     try {
       const res = await API.get('/orders')
       console.log(res.data)
-      set({myOrders: res.data})
+      set({ myOrders: res.data })
     } catch (e) {
       console.log(e)
     }
   },
-  allOrders:null,
+  allOrders: null,
   fetchOrders: async () => {
-    try{
+    try {
       const res = await API.get('/admin/orders')
       console.log(res.data)
-      set({allOrders: res.data})
-    }catch(e) {
+      set({ allOrders: res.data })
+    } catch (e) {
       console.log(e)
     }
   }

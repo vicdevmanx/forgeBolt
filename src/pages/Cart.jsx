@@ -147,8 +147,7 @@ export default function Cart() {
                           className="text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 active:bg-[var(--color-primary)]/10 p-1.5 rounded-md transition-colors"
                           aria-label="Decrease quantity"
                           onClick={async () => {
-                            if(!incLoading) return
-                            if (item.quantity > 1) {
+                            if(incLoading) return
                               try {
                                 const toastId = toast.loading('Updating Quantity...')
                                 setIncLoading(true)
@@ -167,7 +166,7 @@ export default function Cart() {
                                  setIncLoading(false)
                               }
                             }
-                          }}
+                          }
                           disabled={item.quantity <= 1}
                         >
                           <svg width="21" height="21" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

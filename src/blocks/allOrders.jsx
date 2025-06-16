@@ -56,11 +56,12 @@ export default function Orders() {
                     <tbody>
                         {allOrders && allOrders.map((order) => (
                             <tr key={order.id} className="border-b border-[var(--bg-tertiary)]">
-                                <td className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">#{order.user_id}</td>
-                                <td className="px-2 py-3 whitespace-nowrap font-[poppins-medium]">{order.total_amount}</td>
-                                <span className={`px-3 py-1 rounded-xl font-[poppins-medium] ${order.status == 'shipped' && 'bg-[var(--color-primary)]/30 text-[var(--color-primary)]'} ${order.status == 'payed' ? 'bg-orange-400/30 text-[var(--color-primary)]' : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'} font-medium  text-xs whitespace-nowrap`}>
-                                    <td className="px-2 py-3 text-[var(--text-secondary)] whitespace-nowrap">{order.status}</td>
-                                </span>
+                                <td className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">#{order.user_id  || 'loading...'}</td>
+                                <td className="px-2 py-3 whitespace-nowrap font-[poppins-medium]">{order.total_amount  || 'loading...'}</td>
+                                <td className="px-2 py-3 whitespace-nowrap">
+                                    <span className={`px-3 py-1 rounded-xl font-[poppins-medium] ${order.status == 'shipped' && 'bg-[var(--color-primary)]/30 text-[var(--text-secondary)]'} ${order.status == 'payed' ? 'bg-orange-400/30 text-[var(--color-primary)]' : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'} font-medium  text-xs whitespace-nowrap`}>
+                                    {order.status || 'loading...'}
+                                </span></td>
                                 <td className="px-2 py-3 text-[var(--text-secondary)] whitespace-nowrap">
                                     <select
                                         value={order.status}

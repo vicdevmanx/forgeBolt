@@ -32,11 +32,12 @@ export default function MyOrder() {
                 <table className="w-full min-w-[500px] border-collapse text-left">
                     <thead>
                         <tr className="border-b border-[var(--bg-tertiary)]">
-                            <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Id</th>
+                           
                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Image</th>
                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Name</th>
                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Qty</th>
                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Price</th>
+                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Id</th>
                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Status</th>
                         </tr>
                     </thead>
@@ -44,7 +45,7 @@ export default function MyOrder() {
                         <tbody key={order.id}>
                             {order.order_items.map((product, idx) => (
                                 <tr key={order.id + '-' + idx} className="border-b border-[var(--bg-tertiary)]">
-                                    <td className="px-2 py-3 font-medium whitespace-nowrap">{order.id}</td>
+                                    
                                     <td className="px-2 py-3">
                                         {product.products.image_url ? (
                                             <img
@@ -64,6 +65,7 @@ export default function MyOrder() {
                                     <td className="px-2 py-3 font-medium whitespace-nowrap">{product.products.name}</td>
                                     <td className="px-2 py-3 text-[var(--text-secondary)] whitespace-nowrap">{product.quantity}</td>
                                     <td className="px-2 py-3 text-[var(--text-secondary)] whitespace-nowrap">{product.products.price}</td>
+                                    <td className="px-2 py-3 font-medium whitespace-nowrap">{order.id}</td>
                                     <td className="px-2 py-3">
                                           <span className={`px-3 py-1 rounded-xl font-[poppins-medium] ${order.status == 'shipped' && 'bg-[var(--color-primary)]/30 text-[var(--color-primary)]'} ${order.status == 'payed' ? 'bg-orange-400/30' : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'} font-medium  text-xs whitespace-nowrap`}>
                                             {order.status}
@@ -74,8 +76,11 @@ export default function MyOrder() {
                             {/* Total Row */}
                             <tr>
                                 <td className="px-2 py-2 font-bold whitespace-nowrap">
-                                    <Button className='bg-[var(--color-primary)] text-white text-xs p-3 px-4 rounded-lg flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed'
-                                        onClick={async () => {
+                                    <Button
+                                       className={`${order.status == 'pending' ? 'flex': 'hidden'} bg-[var(--color-primary)] text-white text-xs p-3 px-4 rounded-lg 
+                                         justify-center items-center gap-2 disabled:opacity-50 
+                                        disabled:cursor-not-allowed `}
+                                       onClick={async () => {
                                             const form = {
                                                 amount: order.total_amount,
                                                 email: user.email,
@@ -103,7 +108,7 @@ export default function MyOrder() {
                                         }
                                     </Button>
                                 </td>
-                                <td colSpan={3}></td>
+                                <td colSpan={1}></td>
                                 <td className="px-2 py-3 font-bold whitespace-nowrap">Total:</td>
                                 <td className="px-2 py-3 font-bold whitespace-nowrap">{order.total_amount}</td>
 

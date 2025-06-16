@@ -19,6 +19,7 @@ export default function Register() {
   const setUser = useAuthStore(s => s.setUser)
   const setToken = useAuthStore(s => s.setToken)
   const close = useAuthStore((s) => s.closeSignupModal);
+    const setDisableAll = useAuthStore(s => s.setDisableAll)
 
   const validate = (name, value) => {
     if (name === "name" && value.length < 3) return "Too short";
@@ -32,6 +33,7 @@ export default function Register() {
     console.log("Submitted:", formData);
     try {
       setLoading(true)
+      setDisableAll(true)
       const res = await API.post('/register', form)
       console.log(res)
       setToken(res.data.token)
@@ -39,12 +41,14 @@ export default function Register() {
       toast.success('Signed up sucessfully')
       close()
       setLoading(false)
+      setDisableAll(FontFaceSetLoadEvent)
     } catch (err) {
       console.log(err)
       toast.error('Account already Exists, try logging in!', {
         richColors: true
       })
       setLoading(false)
+      setDisableAll(false)
     }
   };
 
