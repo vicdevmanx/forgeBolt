@@ -47,7 +47,7 @@ export default function Orders() {
                 <table className="w-full min-w-[500px] border-collapse text-left">
                     <thead>
                         <tr className="border-b border-[var(--bg-tertiary)]">
-                            <th className="px-2 py-3 font-[poppins-medium]">useId</th>
+                            <th className="px-2 py-3 font-[poppins-medium]">user id</th>
                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Price</th>
                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Status</th>
                               <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Set status</th>
@@ -59,7 +59,7 @@ export default function Orders() {
                                 <td className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">#{order.user_id  || 'loading...'}</td>
                                 <td className="px-2 py-3 whitespace-nowrap font-[poppins-medium]">{order.total_amount  || 'loading...'}</td>
                                 <td className="px-2 py-3 whitespace-nowrap">
-                                    <span className={`px-3 py-1 rounded-xl font-[poppins-medium] ${order.status == 'shipped' && 'bg-[var(--color-primary)]/30 text-[var(--text-secondary)]'} ${order.status == 'payed' ? 'bg-orange-400/30 text-[var(--color-primary)]' : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'} font-medium  text-xs whitespace-nowrap`}>
+                                    <span className={`px-3 py-1 rounded-xl font-[poppins-medium] ${order.status == 'shipped' && 'bg-[var(--color-primary)]/30 text-[var(--text-secondary)]'} ${order.status == 'Paid' ? 'bg-orange-400/30 text-[var(--text-secondary)] px-6' : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'} font-medium  text-xs whitespace-nowrap`}>
                                     {order.status || 'loading...'}
                                 </span></td>
                                 <td className="px-2 py-3 text-[var(--text-secondary)] whitespace-nowrap">
@@ -87,7 +87,7 @@ export default function Orders() {
                                         }}
                                         className="border rounded-md px-2 py-1 text-xs font-[poppins-medium] bg-[var(--bg-secondary)] border-[var(--bg-tertiary)]"
                                     >
-                                        <option value="payed">Payed</option>
+                                        <option value="Paid">Paid</option>
                                         <option value="pending">Pending</option>
                                         <option value="shipped">Shipped</option>
                                     </select>
