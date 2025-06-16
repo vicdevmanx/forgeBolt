@@ -117,6 +117,6 @@ export const useAuthStore = create((set) => ({
       console.log(e)
     }
   },
-  
-
+  edit_mode: null,
+  setEditMode: (product) => set({edit_mode: product })
 }));

@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useNavigate } from 'react-router-dom'
 import Cookies from "js-cookie";
 import { useEffect } from "react";
+import { useAuthStore } from "@/store/authStore";
 
 export default function AdminCreateProduct() {
 function imageUrlToFileUsingCanvas(url, filename) {
@@ -81,7 +82,9 @@ useEffect(() => {
   };
 
 
-  const edit_Product = JSON.parse(Cookies.get("edit-product")) || null
+const edit_Product = useAuthStore(s => s.edit_mode)
+const fetchProducts = useAuthStore(s => s.fetchProducts)
+
 useEffect(() => {
   let isCancelled = false;
   let imagePromise;
@@ -140,20 +143,24 @@ useEffect(() => {
       const res = await API.put(`/products/${edit_Product.id}`, formdata)
       console.log(res)
       toast.success('Product Saved!', {
-        id: toastId
+      id: toastId
       })
 
       setForm({
-        title: "",
-        description: "",
-        category: "",
-        stock_count: "",
-        price: "",
+      title: "",
+      description: "",
+      category: "",
+      stock_count: "",
+      price: "",
       });
       // Cookies.remove("edit-product")
+      fetchProducts()
       navigate('/')
+
     } catch (e) {
       console.log(e)
+      toast.dismiss() // Stop the toast loading on error
+       setIsSubmitting(false);
     } finally {
       setIsSubmitting(false);
     }
@@ -179,7 +186,7 @@ useEffect(() => {
       toast.success('Product Created!', {
         id: toastId
       })
-
+setIsSubmitting(false);
       setForm({
         title: "",
         description: "",

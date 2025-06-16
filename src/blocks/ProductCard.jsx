@@ -28,6 +28,8 @@ const ProductCard = ({ product = {
   const [loading, setLoading] = useState(false)
   const addToCart = useAuthStore(s => s.addToCart)
   const fetchProducts = useAuthStore(s => s.fetchProducts)
+  const edit_mode = useAuthStore(s => s.edit_mode)
+  const setEditMode = useAuthStore(s => s.setEditMode)
   const getCart = useAuthStore(s => s.getCart)
   const setTotal = useAuthStore(s => s.setTotal)
   const isLoggedIn = useAuthStore(s => s.token)
@@ -127,7 +129,7 @@ const ProductCard = ({ product = {
                 (e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  Cookies.set("edit-product", JSON.stringify(product), { expires: 7 })
+                  setEditMode(product)
                   navigate('/create-product')
                 }
               } />
