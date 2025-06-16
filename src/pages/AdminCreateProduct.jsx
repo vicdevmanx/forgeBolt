@@ -7,24 +7,45 @@ import Cookies from "js-cookie";
 import { useEffect } from "react";
 
 export default function AdminCreateProduct() {
-//   function imageUrlToFileUsingCanvas(url, filename) {
-//   return new Promise((resolve, reject) => {
-//     const img = new Image();
-//     img.crossOrigin = "anonymous"; // Important if it's from another domain like Cloudinary
-//     img.onload = () => {
-//       const canvas = document.createElement("canvas");
-//       canvas.width = img.width;
-//       canvas.height = img.height;
-//       canvas.getContext("2d").drawImage(img, 0, 0);
-//       canvas.toBlob(blob => {
-//         const file = new File([blob], filename, { type: blob.type });
-//         resolve(file);
-//       }, "image/jpeg");
-//     };
-//     img.onerror = reject;
-//     img.src = url;
-//   });
-// }
+function imageUrlToFileUsingCanvas(url, filename) {
+  let isCancelled = false;
+
+  const promise = new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+
+    img.onload = () => {
+      if (isCancelled) return;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+
+      canvas.toBlob(blob => {
+        if (isCancelled || !blob) return;
+        const file = new File([blob], filename, { type: blob.type });
+        resolve(file);
+      }, "image/jpeg");
+    };
+
+    img.onerror = (err) => {
+      if (!isCancelled) reject(err);
+    };
+
+    img.src = url;
+  });
+
+  // Return an object with cancel logic in case you're unmounting
+  promise.cancel = () => {
+    isCancelled = true;
+  };
+
+  return promise;
+}
+
 
 useEffect(() => {
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -61,20 +82,43 @@ useEffect(() => {
 
 
   const edit_Product = JSON.parse(Cookies.get("edit-product")) || null
-  useEffect( async () => {
-    if (edit_Product) {
-      setForm({
-        title: edit_Product.name  || "",
-        description: edit_Product.description || "",
-        category: edit_Product.category || "",
-        stock_count: edit_Product.stock_count || "",
-        price: edit_Product.price || "",
-      });
-      setPreview(edit_Product.image_url)
-      const imageFile = await imageUrlToFileUsingCanvas(edit_Product.image_url, edit_Product.name)
-      setImage(imageFile)
+useEffect(() => {
+  let isCancelled = false;
+  let imagePromise;
+
+  const loadImage = async () => {
+    if (!edit_Product) return;
+
+    setForm({
+      title: edit_Product.name || "",
+      description: edit_Product.description || "",
+      category: edit_Product.category || "",
+      stock_count: edit_Product.stock_count || "",
+      price: edit_Product.price || "",
+    });
+
+    setPreview(edit_Product.image_url);
+
+    imagePromise = imageUrlToFileUsingCanvas(edit_Product.image_url, edit_Product.name);
+
+    try {
+      const imageFile = await imagePromise;
+      if (!isCancelled) {
+        setImage(imageFile);
+      }
+    } catch (err) {
+      console.error("Failed to convert image URL to file:", err);
     }
-  }, [])
+  };
+
+  loadImage();
+
+  return () => {
+    isCancelled = true;
+    imagePromise?.cancel?.(); // 💯 cancel if possible
+  };
+}, []);
+
 
   const handleEdit = async (e) => {
     if(!image){
