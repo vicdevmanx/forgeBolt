@@ -10,6 +10,8 @@ import { useEffect } from 'react';
 import API from '@/components/functional/axios';
 import { Edit } from 'lucide-react';
 import { Trash } from 'lucide-react';
+import Cookies from "js-cookie";
+import { useNavigate } from 'react-router-dom'
 
 const ProductCard = ({ product = {
   id: "1",
@@ -53,6 +55,7 @@ const ProductCard = ({ product = {
       fetchProducts()
     });
   };
+  const navigate = useNavigate()
 
   useEffect(() => {
     // Use sync state if cart is already loaded, else fetch
@@ -115,37 +118,40 @@ const ProductCard = ({ product = {
             >
               <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
             </button>
-          {user?.role == 'admin' && <><button 
-            className={`p-2 rounded-full transition-all duration-200
+            {user?.role == 'admin' && <><button
+              className={`p-2 rounded-full transition-all duration-200
          bg-[var(--bg-tertiary)] text-[var(--text-tertiary])] hover:bg-blue-500 active:bg-blue-500
                 `}
             >
               <Edit className={`w-4 h-4`} onClick={
-                () => {
-
+                (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  Cookies.set("edit-product", product)
+                  navigate('/create-product')
                 }
-              }/>
+              } />
             </button>
-             <button 
-            className={`p-2 rounded-full transition-all duration-200
+              <button
+                className={`p-2 rounded-full transition-all duration-200
          bg-[var(--bg-tertiary)] text-[var(--text-tertiary])] hover:bg-red-500 active:bg-red-500
                 `}
-            >
-              <Trash className={`w-4 h-4`} onClick={async (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (window.confirm('Are you sure you want to delete this product?')) {
-                  try {
-                    const res = await API.delete(`/products/${product.id}`);
-                    toast.success('Product deleted!');
-                    fetchProducts();
-                  } catch (e) {
-                    toast.error('Failed to delete product');
-                    console.log(e);
+              >
+                <Trash className={`w-4 h-4`} onClick={async (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (window.confirm('Are you sure you want to delete this product?')) {
+                    try {
+                      const res = await API.delete(`/products/${product.id}`);
+                      toast.success('Product deleted!');
+                      fetchProducts();
+                    } catch (e) {
+                      toast.error('Failed to delete product');
+                      console.log(e);
+                    }
                   }
-                }
-              }} />
-            </button></>}
+                }} />
+              </button></>}
           </div>
 
           {/* Quick Add to Cart */}

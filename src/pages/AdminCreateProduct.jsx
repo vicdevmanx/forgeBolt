@@ -3,6 +3,7 @@ import { Edit2 } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from 'react-router-dom'
+import Cookies from "js-cookie";
 
 export default function AdminCreateProduct() {
   const [image, setImage] = useState(null);
@@ -34,6 +35,45 @@ export default function AdminCreateProduct() {
     }
   };
 
+
+  const edit_Product = Cookies.get("edit-product") || null
+
+  const handleEdit = async (e) => {
+     e.preventDefault();
+    setIsSubmitting(true);
+    let formdata = new FormData();
+    formdata.append("name", form.title);
+    formdata.append("description", form.description);
+    formdata.append("category", form.category);
+    formdata.append("price", form.price);
+    formdata.append("stock_count", form.stock_count);
+    image && formdata.append("image", image, "file")
+
+    try {
+      const toastId = toast.loading('Saving Product...')
+      const res = await API.post(`/products/${edit_Product.id}`, formdata)
+      console.log(res)
+      toast.success('Product Saved!', {
+        id: toastId
+      })
+      
+      setForm({
+        title: "",
+        description: "",
+        category: "",
+        stock_count: "",
+        price: "",
+      });
+      navigate('/')
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  /////////////////////////////////////////////////////////////////////////////////////////
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -52,6 +92,7 @@ export default function AdminCreateProduct() {
       toast.success('Product Created!', {
         id: toastId
       })
+      
       setForm({
         title: "",
         description: "",
@@ -73,7 +114,7 @@ export default function AdminCreateProduct() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center  p-2 my-6 max-md:my-2">
       <form
-        onSubmit={handleSubmit}
+        onSubmit={edit_Product ? handleEdit :  handleSubmit}
         className="w-full max-w-xl flex flex-col gap-3 rounded-xl"
         style={{ background: "none" }}
       >
@@ -169,9 +210,9 @@ export default function AdminCreateProduct() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`bg-[var(--color-primary)] text-white rounded-lg p-3 text-sm font-[poppins-semibold] hover:bg-emerald-700 transition ${isSubmitting ? "opacity-60 pointer-events-none" : ""}`}
+          className={`bg-[var(--color-primary)] text-white rounded-lg p-3 text-sm font-[poppins-semibold] disabled:opacity-60 hover:bg-emerald-700 transition ${isSubmitting ? "opacity-60 pointer-events-none" : ""}`}
         >
-          Create Product
+          {edit_Product ? 'Update Product' : 'Create Product'}
         </button>
       </form>
     </div>
