@@ -72,27 +72,47 @@ export default function Cart() {
     }
   }
 
-
   useEffect(() => {
-    getCart()
-      .then(() => {
-        const cartItems = useAuthStore.getState().cart;
-        setCartProduct(cartItems);
-        setTotal(cartItems.length)
-        // Calculate the total price of all items in the cart
-        const totalPrice = cartItems.reduce((sum, item) => sum + item.total_price, 0);
-        // const tax = ((totalPrice * 6) / 100).toFixed(2);
-        const tax = 0;
-        const fullPrice = (Number(totalPrice) + Number(tax)).toFixed(2)
-        setTotalPrice(totalPrice.toFixed(2));
-        setTax(tax)
-        setFullPrice(fullPrice)
-      })
-      .catch((err) => {
-        toast.error('Failed to fetch product details');
-        setProduct(null);
-      });
-  }, [getCart, removeProduct]);
+    let isMounted = true;
+    // Fetch cart only if not already loaded
+    if (cartProducts === null) {
+      setLoadingCart(true);
+      getCart()
+        .then(() => {
+          if (!isMounted) return;
+          const cartItems = useAuthStore.getState().cart;
+          setCartProduct(cartItems);
+          setTotal(cartItems.length);
+          const totalPrice = cartItems.reduce((sum, item) => sum + item.total_price, 0);
+          const tax = 0;
+          const fullPrice = (Number(totalPrice) + Number(tax)).toFixed(2);
+          setTotalPrice(totalPrice.toFixed(2));
+          setTax(tax);
+          setFullPrice(fullPrice);
+        })
+        .catch(() => {
+          toast.error('Failed to fetch product details');
+          setCartProduct([]);
+        })
+        .finally(() => {
+          if (isMounted) setLoadingCart(false);
+        });
+    }
+    return () => { isMounted = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
+  // Update prices when cartProducts changes
+  useEffect(() => {
+    if (!cartProducts) return;
+    const totalPrice = cartProducts.reduce((sum, item) => sum + item.total_price, 0);
+    const tax = 0;
+    const fullPrice = (Number(totalPrice) + Number(tax)).toFixed(2);
+    setTotalPrice(totalPrice.toFixed(2));
+    setTax(tax);
+    setFullPrice(fullPrice);
+    setTotal(cartProducts.length);
+  }, [cartProducts, setTotal]);
 
   return (
     <>
