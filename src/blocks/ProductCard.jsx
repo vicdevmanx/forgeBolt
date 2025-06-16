@@ -8,6 +8,8 @@ import { toast } from 'sonner';
 import { Loader } from 'lucide-react';
 import { useEffect } from 'react';
 import API from '@/components/functional/axios';
+import { Edit } from 'lucide-react';
+import { Trash } from 'lucide-react';
 
 const ProductCard = ({ product = {
   id: "1",
@@ -27,6 +29,7 @@ const ProductCard = ({ product = {
   const getCart = useAuthStore(s => s.getCart)
   const setTotal = useAuthStore(s => s.setTotal)
   const isLoggedIn = useAuthStore(s => s.token)
+  const user = useAuthStore(s => s.user)
   const [available, setAvailable] = useState(null)
   const handleAddToCart = (e) => {
     if (!isLoggedIn) {
@@ -112,6 +115,37 @@ const ProductCard = ({ product = {
             >
               <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
             </button>
+          {user?.role == 'admin' && <><button 
+            className={`p-2 rounded-full transition-all duration-200
+         bg-[var(--bg-tertiary)] text-[var(--text-tertiary])] hover:bg-blue-500 active:bg-blue-500
+                `}
+            >
+              <Edit className={`w-4 h-4`} onClick={
+                () => {
+
+                }
+              }/>
+            </button>
+             <button 
+            className={`p-2 rounded-full transition-all duration-200
+         bg-[var(--bg-tertiary)] text-[var(--text-tertiary])] hover:bg-red-500 active:bg-red-500
+                `}
+            >
+              <Trash className={`w-4 h-4`} onClick={async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.confirm('Are you sure you want to delete this product?')) {
+                  try {
+                    const res = await API.delete(`/products/${product.id}`);
+                    toast.success('Product deleted!');
+                    fetchProducts();
+                  } catch (e) {
+                    toast.error('Failed to delete product');
+                    console.log(e);
+                  }
+                }
+              }} />
+            </button></>}
           </div>
 
           {/* Quick Add to Cart */}
