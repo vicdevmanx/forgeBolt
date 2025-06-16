@@ -127,7 +127,7 @@ const ProductCard = ({ product = {
                 (e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  Cookies.set("edit-product", product)
+                  Cookies.set("edit-product", JSON.stringify(product), { expires: 7 })
                   navigate('/create-product')
                 }
               } />

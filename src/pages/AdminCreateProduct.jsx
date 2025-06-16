@@ -4,8 +4,32 @@ import React, { useRef, useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from 'react-router-dom'
 import Cookies from "js-cookie";
+import { useEffect } from "react";
 
 export default function AdminCreateProduct() {
+//   function imageUrlToFileUsingCanvas(url, filename) {
+//   return new Promise((resolve, reject) => {
+//     const img = new Image();
+//     img.crossOrigin = "anonymous"; // Important if it's from another domain like Cloudinary
+//     img.onload = () => {
+//       const canvas = document.createElement("canvas");
+//       canvas.width = img.width;
+//       canvas.height = img.height;
+//       canvas.getContext("2d").drawImage(img, 0, 0);
+//       canvas.toBlob(blob => {
+//         const file = new File([blob], filename, { type: blob.type });
+//         resolve(file);
+//       }, "image/jpeg");
+//     };
+//     img.onerror = reject;
+//     img.src = url;
+//   });
+// }
+
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, []);
+
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [form, setForm] = useState({
@@ -36,10 +60,28 @@ export default function AdminCreateProduct() {
   };
 
 
-  const edit_Product = Cookies.get("edit-product") || null
+  const edit_Product = JSON.parse(Cookies.get("edit-product")) || null
+  useEffect( async () => {
+    if (edit_Product) {
+      setForm({
+        title: edit_Product.name  || "",
+        description: edit_Product.description || "",
+        category: edit_Product.category || "",
+        stock_count: edit_Product.stock_count || "",
+        price: edit_Product.price || "",
+      });
+      setPreview(edit_Product.image_url)
+      const imageFile = await imageUrlToFileUsingCanvas(edit_Product.image_url, edit_Product.name)
+      setImage(imageFile)
+    }
+  }, [])
 
   const handleEdit = async (e) => {
-     e.preventDefault();
+    if(!image){
+      toast('Please Ensure you add an Image')
+      return
+    }
+    e.preventDefault();
     setIsSubmitting(true);
     let formdata = new FormData();
     formdata.append("name", form.title);
@@ -51,12 +93,12 @@ export default function AdminCreateProduct() {
 
     try {
       const toastId = toast.loading('Saving Product...')
-      const res = await API.post(`/products/${edit_Product.id}`, formdata)
+      const res = await API.put(`/products/${edit_Product.id}`, formdata)
       console.log(res)
       toast.success('Product Saved!', {
         id: toastId
       })
-      
+
       setForm({
         title: "",
         description: "",
@@ -64,6 +106,7 @@ export default function AdminCreateProduct() {
         stock_count: "",
         price: "",
       });
+      // Cookies.remove("edit-product")
       navigate('/')
     } catch (e) {
       console.log(e)
@@ -92,7 +135,7 @@ export default function AdminCreateProduct() {
       toast.success('Product Created!', {
         id: toastId
       })
-      
+
       setForm({
         title: "",
         description: "",
@@ -114,11 +157,11 @@ export default function AdminCreateProduct() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center  p-2 my-6 max-md:my-2">
       <form
-        onSubmit={edit_Product ? handleEdit :  handleSubmit}
+        onSubmit={edit_Product ? handleEdit : handleSubmit}
         className="w-full max-w-xl flex flex-col gap-3 rounded-xl"
         style={{ background: "none" }}
       >
-        <h2 className="mb-4 font-[poppins-bold] text-2xl text-center">Create Product</h2>
+        <h2 className="mb-4 font-[poppins-bold] text-2xl text-center">{edit_Product ? 'Update Product' : 'Create Product'}</h2>
         <div className="text-center flex flex-col items-center">
           {preview ? (
             <div className="relative w-full">
@@ -137,7 +180,7 @@ export default function AdminCreateProduct() {
                 aria-label="Edit image"
               >
                 {/* Simple pencil SVG icon */}
-               <Edit2 className="size-5"/>
+                <Edit2 className="size-5" />
               </button>
             </div>
           ) : (

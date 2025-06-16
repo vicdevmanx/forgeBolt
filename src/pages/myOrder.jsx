@@ -16,12 +16,12 @@ export default function MyOrder() {
     const fetchUser = useAuthStore(s => s.fetchUser)
 
     useEffect(() => {
-        fetchUser()
+
         fetchMyOrders().then(() => {
             const myOrders = useAuthStore.getState().myOrders
             setMyOrders(myOrders)
         })
-
+        fetchUser()
     }, [])
 
 
@@ -32,12 +32,12 @@ export default function MyOrder() {
                 <table className="w-full min-w-[500px] border-collapse text-left">
                     <thead>
                         <tr className="border-b border-[var(--bg-tertiary)]">
-                           
+
                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Image</th>
                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Name</th>
                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Qty</th>
                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Price</th>
-                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Id</th>
+                            <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Id</th>
                             <th className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">Status</th>
                         </tr>
                     </thead>
@@ -45,12 +45,12 @@ export default function MyOrder() {
                         <tbody key={order.id}>
                             {order.order_items.map((product, idx) => (
                                 <tr key={order.id + '-' + idx} className="border-b border-[var(--bg-tertiary)]">
-                                    
+
                                     <td className="px-2 py-3">
-                                        {product.products.image_url ? (
+                                        {product?.products?.image_url ? (
                                             <img
-                                                src={product.products.image_url}
-                                                alt={product.products.name}
+                                                src={product?.products?.image_url}
+                                                alt={product?.products?.name}
                                                 className="w-10 h-10 rounded-lg object-cover bg-gray-100 block"
                                             />
                                         ) : (
@@ -62,13 +62,13 @@ export default function MyOrder() {
                                             </div>
                                         )}
                                     </td>
-                                    <td className="px-2 py-3 font-medium whitespace-nowrap">{product.products.name}</td>
-                                    <td className="px-2 py-3 text-[var(--text-secondary)] whitespace-nowrap">{product.quantity}</td>
-                                    <td className="px-2 py-3 text-[var(--text-secondary)] whitespace-nowrap">{product.products.price}</td>
-                                    <td className="px-2 py-3 font-medium whitespace-nowrap">{order.id}</td>
+                                    <td className="px-2 py-3 font-medium whitespace-nowrap">{product?.products?.name}</td>
+                                    <td className="px-2 py-3 text-[var(--text-secondary)] whitespace-nowrap">{product?.quantity}</td>
+                                    <td className="px-2 py-3 text-[var(--text-secondary)] whitespace-nowrap">{product?.products?.price}</td>
+                                    <td className="px-2 py-3 font-medium whitespace-nowrap">{order?.id}</td>
                                     <td className="px-2 py-3">
-                                          <span className={`px-3 py-1 rounded-xl font-[poppins-medium] ${order.status == 'shipped' && 'bg-[var(--color-primary)]/30 text-[var(--color-primary)]'} ${order.status == 'payed' ? 'bg-orange-400/30' : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'} font-medium  text-xs whitespace-nowrap`}>
-                                            {order.status}
+                                        <span className={`px-3 py-1 rounded-xl font-[poppins-medium] ${order?.status == 'shipped' && 'bg-[var(--color-primary)]/30 text-[var(--color-primary)]'} ${order.status == 'payed' ? 'bg-orange-400/30' : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'} font-medium  text-xs whitespace-nowrap`}>
+                                            {order?.status}
                                         </span>
                                     </td>
                                 </tr>
@@ -77,17 +77,17 @@ export default function MyOrder() {
                             <tr>
                                 <td className="px-2 py-2 font-bold whitespace-nowrap">
                                     <Button
-                                       className={`${order.status == 'pending' ? 'flex': 'hidden'} bg-[var(--color-primary)] text-white text-xs p-3 px-4 rounded-lg 
+                                        className={`${order.status == 'pending' ? 'flex' : 'hidden'} bg-[var(--color-primary)] text-white text-xs p-3 px-4 rounded-lg 
                                          justify-center items-center gap-2 disabled:opacity-50 
                                         disabled:cursor-not-allowed `}
-                                       onClick={async () => {
+                                        onClick={async () => {
                                             const form = {
                                                 amount: order.total_amount,
                                                 email: user.email,
                                                 order_id: order.id
                                             }
                                             try {
-                                                if(!user){
+                                                if (!user) {
                                                     toast.error('User not found!')
                                                 }
                                                 const tId = toast.loading('Redirecting...')
@@ -103,8 +103,8 @@ export default function MyOrder() {
                                     >
                                         {loading ?
                                             <> <Loader size='16px' /> <p>Redirecting...</p></>
-                                            :<> <CreditCard size='16px' />
-                                            <p> Pay Now </p></>
+                                            : <> <CreditCard size='16px' />
+                                                <p> Pay Now </p></>
                                         }
                                     </Button>
                                 </td>

@@ -91,7 +91,7 @@ export const useAuthStore = create((set) => ({
   getAllUsers: async () => {
     try {
       const res = await API.get('/admin/users')
-      console.log(res.data)
+      // console.log(res.data)
       set({ allUsers: res.data })
     } catch (e) {
       console.log(e)
@@ -101,7 +101,7 @@ export const useAuthStore = create((set) => ({
   fetchMyOrders: async () => {
     try {
       const res = await API.get('/orders')
-      console.log(res.data)
+      // console.log(res.data)
       set({ myOrders: res.data })
     } catch (e) {
       console.log(e)
@@ -111,7 +111,7 @@ export const useAuthStore = create((set) => ({
   fetchOrders: async () => {
     try {
       const res = await API.get('/admin/orders')
-      console.log(res.data)
+      // console.log(res.data)
       set({ allOrders: res.data })
     } catch (e) {
       console.log(e)
