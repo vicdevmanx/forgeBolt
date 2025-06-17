@@ -13,8 +13,7 @@ export default function AuthModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
         className={cn(
-          "rounded-xl border-none shadow-lg w-full max-w-md transition-all p-4",
-          "bg-[var(--bg-color)] text-[var(--text-primary)] font-[poppins-semibold]"
+          "border-none font-[poppins-semibold] transition-all duration-300 ease-in-out"
         )}
         style={{
           backgroundColor: "var(--bg-color)",
@@ -23,17 +22,7 @@ export default function AuthModal({
       >
         <DialogHeader className="flex justify-between items-center mb-4">
           <DialogTitle className="text-xl font-bold">{title}</DialogTitle>
-          {/* {!hideCloseIcon && (
-            <button
-              onClick={onClose}
-              className="text-[var(--text-tertiary)] hover:text-[var(--text-primary)] transition"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )} */}
         </DialogHeader>
-
-        {/* 🔥 Inject any form or content you want */}
         <div>{children}</div>
       </DialogContent>
     </Dialog>

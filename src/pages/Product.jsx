@@ -1,3 +1,4 @@
+import API from '@/components/functional/axios';
 import { Badge } from '@/components/ui/badge';
 import SkeletonProductDetails from '@/skeleton/productSkeleton';
 import { useAuthStore } from '@/store/authStore';
@@ -20,9 +21,10 @@ export default function Product() {
   const setTotal = useAuthStore(s => s.setTotal)
   const fetchProducts = useAuthStore(s => s.fetchProducts)
   const isLoggedIn = useAuthStore(s => s.token)
+  const [available, setAvailable] = useState(null)
 
   const handleAddToCart = (e) => {
-      if (!isLoggedIn) {
+    if (!isLoggedIn) {
       e.preventDefault();
       e.stopPropagation();
       toast.info('login to add to cart')
@@ -34,10 +36,11 @@ export default function Product() {
       toast.success('Product added to cart!')
       getCart().then(() => {
         const cart = useAuthStore.getState().cart
+        setAvailable(cart.find((item) => item.products.id == product.id))
         setTotal(cart.length)
-         setLoading(false)
+        setLoading(false)
       })
-     
+
       fetchProducts()
     });
   };
@@ -45,16 +48,34 @@ export default function Product() {
 
   useEffect(() => {
     if (!id) return;
-    fetchProductDetails(id)
-      .then(() => {
+    let isMounted = true;
+
+    const loadProductAndCart = async () => {
+      try {
+        // Fetch product details and cart in parallel
+        const [_, cartData] = await Promise.all([
+          fetchProductDetails(id),
+          getCart()
+        ]);
         const currentProduct = useAuthStore.getState().productDetails;
-        setProduct(currentProduct);
-      })
-      .catch((err) => {
+        const cart = useAuthStore.getState().cart;
+
+        if (isMounted) {
+          setProduct(currentProduct);
+          setAvailable(cart.find(item => item.products.id === currentProduct.id));
+        }
+      } catch (err) {
         toast.error('Failed to fetch product details');
-        setProduct(null);
-      });
-  }, [id, fetchProductDetails]);
+        if (isMounted) setProduct(null);
+      }
+    };
+
+    loadProductAndCart();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id, fetchProductDetails, getCart]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -106,20 +127,75 @@ export default function Product() {
               )}
             </div>
           </div>
+          {available ?
 
-          <button
-            disabled={product.stock_count === 0 || loading}
-            className={`flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 text-white ${product.stock_count === 0
-              ? 'bg-[var(--color-secondary)] text-forge-tertiary cursor-not-allowed'
-              : 'bg-[var(--color-primary)] hover:shadow-md'
-              }`}
-            onClick={handleAddToCart}
-          >
-            {loading ?
-              <> <Loader size='16px' /> <p>Adding to Cart...</p></>
-              :
-              <>{product.stock_count === 0 ? 'Out of Stock' : 'Add to Cart'}</>}
-          </button>
+            <div className="flex items-center gap-2 w-full mt-2">
+              <button
+                onClick={async (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (available.quantity > 1) {
+                    try {
+                      setLoading(true);
+                      const toastId = toast.loading('Updating Quantity...')
+                      const res = await API.put(`/cart/${available.id}`, { quantity: available.quantity - 1 });
+                      setAvailable(res.data)
+                      toast.success('Quantity Updated!', {
+                        id: toastId
+                      })
+                    } catch (e) {
+                      toast.error('Failed to decrease quantity');
+                      console.log(e)
+                    } finally {
+                      setLoading(false);
+                    }
+                  }
+                }}
+                disabled={available.quantity <= 1 || loading}
+                className="flex-1 px-3 py-1.5 rounded-l-lg bg-[var(--color-primary)] text-white disabled:opacity-50 w-full"
+                aria-label="Decrease quantity"
+              >-</button>
+              <span className="px-4 py-1.5 bg-[var(--bg-tertiary)] rounded font-[poppins-medium] w-full text-center flex-1">
+                {available.quantity}
+              </span>
+              <button
+                onClick={async (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  try {
+                    setLoading(true);
+                    const toastId = toast.loading('Updating Quantity...');
+                    const res = await API.put(`/cart/${available.id}`, { quantity: available.quantity + 1 });
+                    setAvailable(res.data)
+                    toast.success('Quantity Updated!', {
+                      id: toastId
+                    });
+                  } catch (e) {
+                    toast.error('Failed to increase quantity');
+                    console.log(e);
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+                disabled={loading || available.quantity >= product.stock_count}
+                className="flex-1 px-3 py-1.5 rounded-r-lg bg-[var(--color-primary)] text-white disabled:opacity-50 w-full"
+                aria-label="Increase quantity"
+              >+</button>
+            </div>
+            :
+            <button
+              disabled={product.stock_count === 0 || loading}
+              className={`flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed w-full py-2 px-4 rounded-lg font-medium transition-all duration-200 text-white ${product.stock_count === 0
+                ? 'bg-[var(--color-secondary)] text-forge-tertiary cursor-not-allowed'
+                : 'bg-[var(--color-primary)] hover:shadow-md'
+                }`}
+              onClick={handleAddToCart}
+            >
+              {loading ?
+                <> <Loader size='16px' /> <p>Adding to Cart...</p></>
+                :
+                <>{product.stock_count === 0 ? 'Out of Stock' : 'Add to Cart'}</>}
+            </button>}
         </div>
       </div>
         : <SkeletonProductDetails />}

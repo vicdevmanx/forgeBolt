@@ -155,7 +155,7 @@ useEffect(() => {
       });
       // Cookies.remove("edit-product")
       fetchProducts()
-      navigate('/')
+      navigate('/products')
 
     } catch (e) {
       console.log(e)
@@ -194,7 +194,7 @@ setIsSubmitting(false);
         stock_count: "",
         price: "",
       });
-      navigate('/') // Uncomment if you have navigate
+      navigate('/products') // Uncomment if you have navigate
     } catch (e) {
       console.log(e)
     } finally {

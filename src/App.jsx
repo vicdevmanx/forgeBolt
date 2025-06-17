@@ -62,7 +62,7 @@ const SignupModalWrapper = () => {
   }
 
   return (
-    <AuthModal isOpen={isOpen} onClose={close} title="Create a New Account">
+    <AuthModal isOpen={isOpen} onClose={close}  title="Create a New Account">
       <Register />
       <p className='text-center my-4 text-sm'>Already have an Account? <span className={`underline ${disableAll ? 'text-[var(--color-secondary)]/50' : 'text-[var(--color-secondary)]'}`} onClick={switchtoLogin}>Login</span></p>
 
