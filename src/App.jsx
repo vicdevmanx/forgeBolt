@@ -20,6 +20,7 @@ const LoginModalWrapper = () => {
   const close = useAuthStore((s) => s.closeLoginModal);
   const disableAll = useAuthStore(s => s.disableAll)
   const setDisableAll = useAuthStore(s => s.setDisableAll)
+  const openSignupModal = useAuthStore(s => s.openSignupModal)
   useEffect(() => {
     const disableAll = useAuthStore.getState().disableAll
     setDisableAll(disableAll)
