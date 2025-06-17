@@ -59,7 +59,7 @@ export default function Orders() {
                                 <td className="px-2 py-3 font-[poppins-medium] whitespace-nowrap">#{order.user_id  || 'loading...'}</td>
                                 <td className="px-2 py-3 whitespace-nowrap font-[poppins-medium]">{order.total_amount  || 'loading...'}</td>
                                 <td className="px-2 py-3 whitespace-nowrap">
-                                    <span className={`px-3 py-1 rounded-xl font-[poppins-medium] ${order.status == 'shipped' && 'bg-[var(--color-primary)]/30 text-[var(--text-secondary)]'} ${order.status == 'Paid' ? 'bg-orange-400/30 text-[var(--text-secondary)] px-6' : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'} font-medium  text-xs whitespace-nowrap`}>
+                                    <span className={`px-3 py-1 rounded-xl font-[poppins-medium] ${order.status == 'shipped' && 'bg-[var(--color-primary)]/30 text-[var(--text-secondary)]'} ${order.status == 'paid' ? 'bg-orange-400/30 text-[var(--text-secondary)] px-6' : 'bg-[var(--bg-tertiary)] text-[var(--text-secondary)]'} font-medium  text-xs whitespace-nowrap`}>
                                     {order.status || 'loading...'}
                                 </span></td>
                                 <td className="px-2 py-3 text-[var(--text-secondary)] whitespace-nowrap">
@@ -87,7 +87,7 @@ export default function Orders() {
                                         }}
                                         className="border rounded-md px-2 py-1 text-xs font-[poppins-medium] bg-[var(--bg-secondary)] border-[var(--bg-tertiary)]"
                                     >
-                                        <option value="Paid">Paid</option>
+                                        <option value="paid">paid</option>
                                         <option value="pending">Pending</option>
                                         <option value="shipped">Shipped</option>
                                     </select>

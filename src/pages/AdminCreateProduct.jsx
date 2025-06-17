@@ -155,7 +155,7 @@ useEffect(() => {
       });
       // Cookies.remove("edit-product")
       fetchProducts()
-      navigate('/products')
+      navigate(`/products/${edit_Product.id}`)
 
     } catch (e) {
       console.log(e)
